@@ -11,7 +11,7 @@
   header h1{font-size:22px}
   header nav a{color:white;text-decoration:none;margin-left:18px;font-weight:600}
   .hero{background:linear-gradient(135deg,#0b4f8a,#1e88e5);color:white;padding:70px 5%;text-align:center}
-  .hero img{width:160px;height:160px;object-fit:cover;border-radius:50%;border:4px solid white;margin-bottom:15px;background:white}
+  .hero img{width:170px;height:170px;object-fit:cover;border-radius:50%;border:4px solid white;margin-bottom:15px;background:white}
   .hero h2{font-size:34px;margin-bottom:8px}
   .hero .slogan{font-size:19px;font-style:italic;background:rgba(255,255,255,.15);display:inline-block;padding:8px 20px;border-radius:30px;margin:10px 0 20px}
   .hero p{max-width:650px;margin:0 auto 20px;opacity:.95}
@@ -23,18 +23,18 @@
   .card{background:white;padding:25px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,.08);text-align:center}
   .card span{font-size:35px}
   .about-box{background:white;padding:30px;border-radius:15px;box-shadow:0 4px 15px rgba(0,0,0,.08)}
-  .about-box p{margin-bottom:12px}
   .info{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
   .info div{background:#eaf2fb;padding:10px 18px;border-radius:20px;font-weight:600}
   .projet{background:white;border-radius:15px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,.08)}
   .projet img{width:100%;height:180px;object-fit:cover}
   .projet div{padding:20px}
   .citation{background:#0b4f8a;color:white;padding:35px;border-radius:15px;text-align:center;font-size:20px;font-style:italic}
-  form{background:white;padding:30px;border-radius:15px;box-shadow:0 4px 15px rgba(0,0,0,.08);display:flex;flex-direction:column;gap:15px}
-  input,textarea{padding:13px;border:1px solid #ddd;border-radius:10px;width:100%}
-  button{background:#0b4f8a;color:white;border:none;padding:14px;border-radius:10px;font-weight:bold;cursor:pointer}
+  .contact-box{background:white;padding:30px;border-radius:15px;box-shadow:0 4px 15px rgba(0,0,0,.08);text-align:center}
+  .contact-box a{display:inline-block;margin:8px;padding:12px 20px;border-radius:30px;text-decoration:none;font-weight:bold}
+  .wa{background:#25D366;color:white}
+  .mail{background:#EA4335;color:white}
+  .fb{background:#1877F2;color:white}
   footer{background:#0b2a44;color:white;text-align:center;padding:25px}
-  footer a{color:#90caf9;text-decoration:none}
   @media(max-width:600px){.hero h2{font-size:28px} header nav{display:none}}
 </style>
 </head>
@@ -42,78 +42,60 @@
 
 <header>
   <h1>HEKIMA SYAGHUSWA</h1>
-  <nav>
-    <a href="#apropos">À propos</a>
-    <a href="#valeurs">Valeurs</a>
-    <a href="#projets">Projets</a>
-    <a href="#contact">Contact</a>
-  </nav>
+  <nav><a href="#apropos">À propos</a><a href="#valeurs">Valeurs</a><a href="#projets">Projets</a><a href="#contact">Contact</a></nav>
 </header>
 
 <div class="hero">
   <img src="photo.jpg" alt="Photo de Hekima Syaghuswa">
-  <h2>Salut, moi c'est Hekima Syaghuswa 👋</h2>
+  <h2>Salut, moi c'est Hekima Syaghuswa</h2>
   <div class="slogan">« La Sagesse et l'Honnêteté avant tout »</div>
   <p>Jeune étudiant en Gestion Informatique à l'UAC Butembo, entrepreneur en informatique et catholique engagé. Je crois que la technologie doit servir avec sagesse et honnêteté.</p>
   <a class="btn" href="#apropos">Découvrir mon histoire</a>
-  <a class="btn btn-outline" href="#contact">Me contacter</a>
+  <a class="btn btn-outline" href="https://wa.me/243976053534">WhatsApp moi</a>
 </div>
 
 <section id="apropos">
   <h3>Qui suis-je ?</h3>
   <div class="about-box">
     <p>Je m'appelle <b>Hekima Syaghuswa</b>, je vis à <b>Butembo, Nord-Kivu (RDC)</b>.</p>
-    <p>Je suis jeune étudiant à l'<b>Université de l'Assomption au Congo (UAC) Butembo</b>, en <b>Gestion Informatique</b>. J'ai choisi cette filière parce que j'aime comprendre comment la technologie peut résoudre les vrais problèmes de notre communauté.</p>
-    <p>En dehors des cours, je suis <b>entrepreneur en informatique</b> : je crée des sites web, j'aide les gens et les petites entreprises à être visibles sur internet, et j'apprends chaque jour un peu plus.</p>
-    <p><b>Ma foi :</b> Je suis <b>catholique</b>. Ma foi m'apprend la discipline, le respect des autres et le service. C'est elle qui me pousse à travailler honnêtement.</p>
-    <p><b>Ma mission :</b> Prôner toujours la <b>sagesse</b> et l'<b>honnêteté</b> dans tout ce que je fais, à l'école, dans le business et dans la vie.</p>
-    <div class="info">
-      <div>📍 Butembo, RDC</div>
-      <div>🎓 UAC Butembo</div>
-      <div>💻 Gestion Informatique</div>
-      <div>🙏 Catholique</div>
-      <div>💡 Entrepreneur</div>
-    </div>
+    <p>Je suis jeune étudiant à l'<b>Université de l'Assomption au Congo (UAC) Butembo</b>, en <b>Gestion Informatique</b>.</p>
+    <p>En dehors des cours, je suis <b>entrepreneur en informatique</b> : je crée des sites web, j'aide les gens et les petites entreprises à être visibles sur internet.</p>
+    <p><b>Ma foi :</b> Je suis <b>catholique</b>. Ma foi m'apprend la discipline, le respect des autres et le service.</p>
+    <p><b>Ma mission :</b> Prôner toujours la <b>sagesse</b> et l'<b>honnêteté</b> dans tout ce que je fais.</p>
+    <div class="info"><div>📍 Butembo, RDC</div><div>🎓 UAC Butembo</div><div>💻 Gestion Informatique</div><div>🙏 Catholique</div><div>💡 Entrepreneur</div></div>
   </div>
 </section>
 
 <section id="valeurs">
   <h3>Mes valeurs</h3>
   <div class="cards">
-    <div class="card"><span>🦉</span><h4>La Sagesse</h4><p>Hekima veut dire Sagesse. Je prends le temps de réfléchir avant d'agir, et je cherche toujours la bonne décision.</p></div>
-    <div class="card"><span>🤝</span><h4>L'Honnêteté</h4><p>Je travaille avec transparence. Un engagement est un engagement, que ce soit avec un client ou un ami.</p></div>
-    <div class="card"><span>🙏</span><h4>La Foi</h4><p>En tant que catholique, je mets Dieu au centre. La prière me donne la force et la paix dans mes projets.</p></div>
+    <div class="card"><span>🦉</span><h4>La Sagesse</h4><p>Hekima veut dire Sagesse. Je prends le temps de réfléchir avant d'agir.</p></div>
+    <div class="card"><span>🤝</span><h4>L'Honnêteté</h4><p>Je travaille avec transparence. Un engagement est un engagement.</p></div>
+    <div class="card"><span>🙏</span><h4>La Foi</h4><p>En tant que catholique, je mets Dieu au centre de mes projets.</p></div>
   </div>
 </section>
 
-<div style="max-width:1000px;margin:auto;padding:0 5%">
-  <div class="citation">"La sagesse vaut mieux que l'or, et l'honnêteté vaut mieux que la richesse."<br><small>- Hekima Syaghuswa</small></div>
-</div>
+<div style="max-width:1000px;margin:auto;padding:0 5%"><div class="citation">"La sagesse vaut mieux que l'or, et l'honnêteté vaut mieux que la richesse."<br><small>- Hekima Syaghuswa</small></div></div>
 
 <section id="projets">
   <h3>Ce que je fais</h3>
   <div class="cards">
-    <div class="projet"><img src="projet1.jpg"><div><h4>Création de Sites Web</h4><p>Je crée des sites web simples, rapides et beaux pour les entreprises, les écoles, les églises et les particuliers à Butembo.</p></div></div>
-    <div class="projet"><img src="projet2.jpg"><div><h4>Études en Gestion Informatique</h4><p>Étudiant à l'UAC Butembo, j'apprends la gestion, la programmation et les bases de données pour devenir un vrai professionnel.</p></div></div>
-    <div class="projet"><img src="projet3.jpg"><div><h4>Partage & Mentorat</h4><p>J'aime partager ce que j'apprends : la lecture, la prière et l'informatique, pour aider les jeunes de Butembo à avancer.</p></div></div>
+    <div class="projet"><img src="photo.jpg"><div><h4>Création de Sites Web</h4><p>Je crée des sites web simples, rapides et beaux pour les entreprises, les écoles, les églises et les particuliers à Butembo.</p></div></div>
+    <div class="projet"><img src="photo.jpg"><div><h4>Études en Gestion Informatique</h4><p>Étudiant à l'UAC Butembo, j'apprends la gestion, la programmation et les bases de données.</p></div></div>
+    <div class="projet"><img src="photo.jpg"><div><h4>Partage & Mentorat</h4><p>J'aime partager ce que j'apprends pour aider les jeunes de Butembo à avancer.</p></div></div>
   </div>
 </section>
 
 <section id="contact">
   <h3>Contacte-moi</h3>
-  <form>
-    <input type="text" placeholder="HEKIMA SYAGHUSWA" required>
-    <input type="email" placeholder="hkkakule@gmail.com" required>
-    <textarea rows="4" placeholder="Ton message pour Hekima..."></textarea>
-    <button type="submit">Envoyer le message</button>
-  </form>
-  <p style="text-align:center;margin-top:20px">📍 Butembo, Nord-Kivu - RDC<br>📧 Email : [mets ton email ici]<br>📱 WhatsApp : [mets ton numéro ici]<br>📘 Facebook : [mets ton lien Facebook ici]</p>
+  <div class="contact-box">
+    <p style="margin-bottom:20px">📍 Butembo, Nord-Kivu - RDC<br>Tu as un projet, une question ou tu veux juste discuter ? Écris-moi !</p>
+    <a class="wa" href="https://wa.me/243976053534">📱 WhatsApp : +243 976 053 534</a><br>
+    <a class="mail" href="mailto:hkkakule@gmail.com">📧 Gmail : hkkakule@gmail.com</a><br>
+    <a class="fb" href="https://www.facebook.com/search/top?q=Hekima%20Syaghuswa">📘 Facebook : Hekima Syaghuswa</a>
+  </div>
 </section>
 
-<footer>
-  <p>© 2026 Hekima Syaghuswa - Fait avec ❤️ et Sagesse à Butembo</p>
-  <p><a href="#">Retour en haut ↑</a></p>
-</footer>
-
+<footer><p>© 2026 Hekima Syaghuswa - Fait avec ❤️ et Sagesse à Butembo</p></footer>
 </body>
 </html>
