@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galerie TPHK</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; text-align: center; }
+  h1 { color: #333; }
+  a { display: inline-block; background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; margin-bottom: 20px; }
+  #gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
+  #gallery img { width: 100%; height: 220px; object-fit: cover; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+</style>
+</head>
+<body>
+
+<h1>🖼️ Galerie TPHK</h1>
+<a href="upload.html">➕ Ajouter une photo</a>
+<p id="loading">Chargement des photos...</p>
+<div id="gallery"></div>
+
+<script>
+  const cloudName = "sogn1cr8";
+  const tag = "tphk_gallery";
+
+  async function loadGallery() {
+    try {
+      const res = await fetch(`https://res.cloudinary.com/${cloudName}/image/list/${tag}.json`);
+      const data = await res.json();
+      const gallery = document.getElementById('gallery');
+      document.getElementById('loading').style.display = 'none';
+
+      if (!data.resources || data.resources.length === 0) {
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('loading').textContent = "Aucune photo pour le moment. Envoie la première !";
+        return;
+      }
+
+      data.resources.reverse().forEach(photo => {
+        const img = document.createElement('img');
+        img.src = `https://res.cloudinary.com/${cloudName}/image/upload/w_500,q_auto,f_auto/${photo.public_id}.${photo.format}`;
+        gallery.appendChild(img);
+      });
+    } catch(e) {
+      document.getElementById('loading').textContent = "Erreur de chargement. Réessaie.";
+    }
+  }
+  loadGallery();
+</script>
+</body>
+</html>
