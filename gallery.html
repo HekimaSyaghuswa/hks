@@ -23,29 +23,24 @@
   const cloudName = "sogn1cr8";
   const tag = "tphk_gallery";
 
-  async function loadGallery() {
-    try {
-      const res = await fetch(`https://res.cloudinary.com/${cloudName}/image/list/${tag}.json`);
-      const data = await res.json();
-      const gallery = document.getElementById('gallery');
-      document.getElementById('loading').style.display = 'none';
+  function loadGallery() {
+  const gallery = document.getElementById('gallery');
+  document.getElementById('loading').style.display = 'none';
+  let photos = JSON.parse(localStorage.getItem('tphk_photos') || '[]');
 
-      if (!data.resources || data.resources.length === 0) {
-        document.getElementById('loading').style.display = 'block';
-        document.getElementById('loading').textContent = "Aucune photo pour le moment. Envoie la première !";
-        return;
-      }
-
-      data.resources.reverse().forEach(photo => {
-        const img = document.createElement('img');
-        img.src = `https://res.cloudinary.com/${cloudName}/image/upload/w_500,q_auto,f_auto/${photo.public_id}.${photo.format}`;
-        gallery.appendChild(img);
-      });
-    } catch(e) {
-      document.getElementById('loading').textContent = "Erreur de chargement. Réessaie.";
-    }
+  if (photos.length === 0) {
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('loading').textContent = "Aucune photo pour le moment. Envoie la première !";
+    return;
   }
-  loadGallery();
+
+  photos.reverse().forEach(url => {
+    const img = document.createElement('img');
+    img.src = url;
+    gallery.appendChild(img);
+  });
+}
+loadGallery();
 </script>
 </body>
 </html>

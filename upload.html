@@ -38,6 +38,10 @@ async function envoyer(){
   const data = await res.json();
   if(data.secure_url){
     document.getElementById('status').innerText = "✅ Photo sauvegardée !";
+    // Sauvegarde l'URL pour la galerie
+let photos = JSON.parse(localStorage.getItem('tphk_photos') || '[]');
+photos.push(data.secure_url);
+localStorage.setItem('tphk_photos', JSON.stringify(photos));
     const img = document.getElementById('resultat');
     img.src = data.secure_url;
     img.style.display = 'block';
