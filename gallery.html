@@ -26,7 +26,12 @@
   function loadGallery() {
   const gallery = document.getElementById('gallery');
   document.getElementById('loading').style.display = 'none';
-  let photos = JSON.parse(localStorage.getItem('tphk_photos') || '[]');
+  let oldPhotos = [
+  "https://res.cloudinary.com/sogn1cr8/image/upload/v1794062343/o42gdmipykwzxgwloboz.jpg",
+  "https://res.cloudinary.com/sogn1cr8/image/upload/v1794061452/kjf0ssy7rwdy6j9kqzdk.jpg",
+  "https://res.cloudinary.com/sogn1cr8/image/upload/v1794060136/tlmnq1k1awpbepsqdkn7.jpg"
+];
+let photos = [...oldPhotos, ...JSON.parse(localStorage.getItem('tphk_photos') || '[]')];
 
   if (photos.length === 0) {
     document.getElementById('loading').style.display = 'block';
