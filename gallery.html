@@ -48,6 +48,11 @@ function load() {
 }
 
 function supprimer(key) {
+  let mdp = prompt("🔒 Entre le mot de passe pour supprimer :");
+  if (mdp !== "TPHK2026") {
+    alert("Mot de passe incorrect !");
+    return;
+  }
   if (!confirm("Tu veux vraiment supprimer cette photo ?")) return;
   fetch(`https://tphk-gallery-default-rtdb.firebaseio.com/photos/${key}.json`, { method: 'DELETE' })
     .then(() => load());
