@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Uploader une photo</title>
+<style>
+body{font-family:Arial;text-align:center;padding:30px;background:#f4f6fb}
+.box{background:white;padding:25px;border-radius:15px;max-width:400px;margin:auto;box-shadow:0 4px 15px rgba(0,0,0,.1)}
+input{margin:15px 0}
+img{width:100%;border-radius:10px;margin-top:15px;display:none}
+button{background:#0b4f8a;color:white;border:none;padding:12px 20px;border-radius:20px;font-weight:bold;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="box">
+  <h2>📸 Envoie ta photo</h2>
+  <input type="file" id="photo" accept="image/*">
+  <br>
+  <button onclick="envoyer()">Envoyer sur le Cloud</button>
+  <p id="status"></p>
+  <img id="resultat">
+  <p id="lien"></p>
+</div>
+
+<script>
+async function envoyer(){
+  const fichier = document.getElementById('photo').files[0];
+  if(!fichier){ alert("Choisis d'abord une photo"); return; }
+  document.getElementById('status').innerText = "Envoi en cours... ⏳";
+  const formData = new FormData();
+  formData.append('file', fichier);
+  formData.append('upload_preset', 'photos_projet');
+  const res = await fetch('https://api.cloudinary.com/v1_1/sogn1cr8/image/upload', {
+    method: 'POST',
+    body: formData
+  });
+  const data = await res.json();
+  if(data.secure_url){
+    document.getElementById('status').innerText = "✅ Photo sauvegardée !";
+    const img = document.getElementById('resultat');
+    img.src = data.secure_url;
+    img.style.display = 'block';
+    document.getElementById('lien').innerHTML = `<a href="${data.secure_url}" target="_blank">Voir le lien de la photo</a>`;
+  } else {
+    document.getElementById('status').innerText = "❌ Erreur : " + JSON.stringify(data);
+  }
+}
+</script>
+</body>
+</html>
