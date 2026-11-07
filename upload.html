@@ -16,6 +16,8 @@ button{background:#0b4f8a;color:white;border:none;padding:12px 20px;border-radiu
   <h2>📸 Envoie ta photo</h2>
   <input type="file" id="photo" accept="image/*">
   <br>
+  <input type="text" id="name" placeholder="Ton nom (ex: Papa)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:none;">
+<textarea id="desc" placeholder="Description... (ex: Anniversaire à Kyondo)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:none;">
   <button onclick="envoyer()">Envoyer sur le Cloud</button>
   <p id="status"></p>
   <img id="resultat">
@@ -40,9 +42,18 @@ async function envoyer(){
     document.getElementById('status').innerText = "✅ Photo sauvegardée !";
     // Sauvegarde l'URL pour la galerie
 // Envoie le lien dans Firebase automatiquement
+// Envoie le lien + nom + description dans Firebase
+let nom = document.getElementById('name').value || "Anonyme";
+let description = document.getElementById('desc').value || "";
+
 fetch('https://tphk-gallery-default-rtdb.firebaseio.com/photos.json', {
   method: 'POST',
-  body: JSON.stringify({ url: data.secure_url, date: Date.now() })
+  body: JSON.stringify({ 
+    url: data.secure_url, 
+    name: nom,
+    desc: description,
+    date: Date.now() 
+  })
 });
     const img = document.getElementById('resultat');
     img.src = data.secure_url;
