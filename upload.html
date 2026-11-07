@@ -30,6 +30,7 @@ async function envoyer(){
   const formData = new FormData();
   formData.append('file', fichier);
   formData.append('upload_preset', 'photos_projet');
+  formData.append('tags', 'tphk_gallery');
   const res = await fetch('https://api.cloudinary.com/v1_1/sogn1cr8/image/upload', {
     method: 'POST',
     body: formData
