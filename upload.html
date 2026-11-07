@@ -39,9 +39,11 @@ async function envoyer(){
   if(data.secure_url){
     document.getElementById('status').innerText = "✅ Photo sauvegardée !";
     // Sauvegarde l'URL pour la galerie
-let photos = JSON.parse(localStorage.getItem('tphk_photos') || '[]');
-photos.push(data.secure_url);
-localStorage.setItem('tphk_photos', JSON.stringify(photos));
+// Envoie le lien dans Firebase automatiquement
+fetch('https://tphk-gallery-default-rtdb.firebaseio.com/photos.json', {
+  method: 'POST',
+  body: JSON.stringify({ url: data.secure_url, date: Date.now() })
+});
     const img = document.getElementById('resultat');
     img.src = data.secure_url;
     img.style.display = 'block';
