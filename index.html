@@ -3,33 +3,153 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HK Papeterie - Butembo</title>
+<title>HK Papeterie - Butembo | Tout pour l'école</title>
 <style>
-*{box-sizing:border-box;font-family:Arial}
-body{background:#f4f6fb;margin:0;padding:0}
-header{background:#0b4f8a;color:white;padding:25px 15px;text-align:center}
-header a{display:inline-block;background:white;color:#0b4f8a;padding:12px 20px;border-radius:25px;text-decoration:none;font-weight:bold;margin:5px}
-h2{text-align:center;color:#0b4f8a;padding:20px 10px 0}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;max-width:1000px;margin:20px auto;padding:0 15px}
-.papeterie-card{background:white;border-radius:15px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.08)}
+*{box-sizing:border-box;font-family:Arial;margin:0;padding:0}
+body{background:#f4f6fb;color:#222}
+a{text-decoration:none}
+/* HEADER */
+header{background:#0b4f8a;color:white;padding:15px;position:sticky;top:0;z-index:10}
+.nav{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.nav b{font-size:22px}
+.nav a{color:white;margin:0 8px;font-weight:bold}
+.btn-blanc{background:white;color:#0b4f8a !important;padding:10px 18px;border-radius:25px}
+/* HERO */
+.hero{background:#0b4f8a;color:white;text-align:center;padding:45px 15px}
+.hero h1{font-size:32px;margin-bottom:10px}
+.hero p{font-size:17px;opacity:.9}
+.hero a{display:inline-block;margin:15px 5px;background:#FFC107;color:#222;padding:14px 22px;border-radius:25px;font-weight:bold}
+.hero a:last-child{background:white;color:#0b4f8a}
+/* CATEGORIES */
+.section{max-width:1100px;margin:auto;padding:30px 15px}
+.section h2{text-align:center;color:#0b4f8a;margin-bottom:20px}
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:15px}
+.cat{background:white;padding:20px 10px;border-radius:15px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.07);font-weight:bold;cursor:pointer}
+.cat span{font-size:35px;display:block;margin-bottom:8px}
+/* PRODUITS */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}
+.papeterie-card{background:white;border-radius:15px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08)}
 .papeterie-card img{width:100%;height:auto;max-height:380px;object-fit:contain;background:#fff;display:block}
 .papeterie-card div{padding:15px}
+.papeterie-card h4{color:#0b4f8a;margin:5px 0}
 .prix{background:#FFF3E0;color:#E65100;padding:5px 12px;border-radius:20px;font-weight:bold;display:inline-block}
 .vendeur-badge{background:#0b4f8a;color:white;padding:5px 12px;border-radius:20px;font-size:13px;font-weight:bold;display:inline-block;margin-bottom:8px}
-.btn-supprimer{background:#ff3b30;color:white;border:0;padding:8px 15px;border-radius:20px;font-weight:bold;cursor:pointer;margin-left:10px}
+.btn-commander{display:inline-block;background:#25D366;color:white;padding:10px 18px;border-radius:20px;font-weight:bold;margin-top:10px}
+.btn-supprimer{background:#ff3b30;color:white;border:0;padding:8px 15px;border-radius:20px;font-weight:bold;cursor:pointer;margin-left:8px}
+/* NOS PRODUITS HK */
+.produits-hk{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px}
+.produit-hk{background:white;border-radius:15px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08);text-align:center;padding-bottom:15px}
+.produit-hk img{width:100%;height:220px;object-fit:contain;background:#fff}
+/* AVANTAGES */
+.avantages{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:15px}
+.av{background:white;padding:20px;border-radius:15px;text-align:center}
+.av span{font-size:30px}
+/* A PROPOS + CONTACT */
+.apropos{background:white;border-radius:15px;padding:25px;line-height:1.7;text-align:center}
+.contact-box{background:#0b4f8a;color:white;border-radius:15px;padding:25px;text-align:center;line-height:2}
+.contact-box a{color:#FFC107;font-weight:bold}
+footer{background:#0b4f8a;color:white;text-align:center;padding:25px 15px;margin-top:30px}
+.whatsapp{position:fixed;bottom:20px;right:20px;background:#25D366;color:white;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;z-index:99}
 </style>
 </head>
 <body>
 
+<!-- 1. HEADER / MENU -->
 <header>
-<h1>🏫 HK Papeterie</h1>
-<p>Butembo - Tout pour l'école</p>
-<a href="upload.html">➕ Publie aussi ton produit</a>
-<a href="gallery.html">📸 Voir la galerie</a>
+<div class="nav">
+<b>🏫 HK Papeterie</b>
+<div>
+<a href="#accueil">Accueil</a>
+<a href="#categories">Catégories</a>
+<a href="#galerie-publique">Galerie Publique</a>
+<a href="#apropos">À Propos</a>
+<a href="#contact">Contact</a>
+<a href="upload.html" class="btn-blanc">➕ Publier</a>
+</div>
+</div>
 </header>
 
-<h2 id="galerie-publique">🛍️ Galerie Publique - Produits de tout le monde</h2>
+<!-- 2. BANNIÈRE -->
+<section class="hero" id="accueil">
+<h1>🏫 HK Papeterie - Butembo</h1>
+<p>Tout pour l'école, au meilleur prix ! Cahiers, sacs, stylos, livres et plus.</p>
+<a href="#galerie-publique">🛍️ Voir les produits</a>
+<a href="upload.html">➕ Publie aussi ton produit</a>
+<p style="margin-top:15px;font-size:14px">📍 Butembo, Kitatumba | 📱 0976 053 534</p>
+</section>
+
+<!-- 3. CATÉGORIES -->
+<div class="section" id="categories">
+<h2>📚 Nos Catégories</h2>
+<div class="cats">
+<div class="cat" onclick="document.getElementById('galerie-publique').scrollIntoView()"><span>📓</span>Cahiers</div>
+<div class="cat" onclick="document.getElementById('galerie-publique').scrollIntoView()"><span>🎒</span>Sacs à dos</div>
+<div class="cat" onclick="document.getElementById('galerie-publique').scrollIntoView()"><span>🖊️</span>Stylos</div>
+<div class="cat" onclick="document.getElementById('galerie-publique').scrollIntoView()"><span>📖</span>Livres</div>
+<div class="cat" onclick="document.getElementById('galerie-publique').scrollIntoView()"><span>✏️</span>Crayons</div>
+<div class="cat" onclick="document.getElementById('galerie-publique').scrollIntoView()"><span>📐</span>Géométrie</div>
+<div class="cat" onclick="document.getElementById('galerie-publique').scrollIntoView()"><span>🎨</span>Peinture</div>
+<div class="cat" onclick="document.getElementById('galerie-publique').scrollIntoView()"><span>🖨️</span>Impression</div>
+</div>
+</div>
+
+<!-- 4. NOS PRODUITS HK - TES PRODUITS FIXES -->
+<div class="section">
+<h2>⭐ Nos Produits HK</h2>
+<div class="produits-hk">
+<div class="produit-hk"><img src="https://via.placeholder.com/300x220?text=Cahier+HK"><h3>Cahier 200 pages</h3><p>Qualité supérieure</p><b>5 000 FC</b><br><a href="https://wa.me/243976053534" class="btn-commander">Commander</a></div>
+<div class="produit-hk"><img src="https://via.placeholder.com/300x220?text=Sac+HK"><h3>Sac à dos HK</h3><p>Solide et joli</p><b>25 000 FC</b><br><a href="https://wa.me/243976053534" class="btn-commander">Commander</a></div>
+<div class="produit-hk"><img src="https://via.placeholder.com/300x220?text=Stylo+HK"><h3>Lot de stylos</h3><p>Bleu, noir, rouge</p><b>3 000 FC</b><br><a href="https://wa.me/243976053534" class="btn-commander">Commander</a></div>
+<div class="produit-hk"><img src="https://via.placeholder.com/300x220?text=Notebook"><h3>Notebook Cuir</h3><p>Élégant, pour notes</p><b>15 000 FC</b><br><a href="https://wa.me/243976053534" class="btn-commander">Commander</a></div>
+</div>
+</div>
+
+<!-- 5. GALERIE PUBLIQUE - FIREBASE -->
+<div class="section" id="galerie-publique">
+<h2>🛍️ Galerie Publique - Produits de tout le monde</h2>
+<p style="text-align:center;margin-bottom:20px">Tout le monde peut publier ici ! <a href="upload.html" style="color:#0b4f8a;font-weight:bold">➕ Publie aussi ton produit</a> | <a href="gallery.html" style="color:#0b4f8a;font-weight:bold">📸 Voir toute la galerie</a></p>
 <div class="grid" id="liste-produits"><p style="text-align:center">Chargement...</p></div>
+</div>
+
+<!-- 6. POURQUOI NOUS -->
+<div class="section">
+<h2>✅ Pourquoi choisir HK ?</h2>
+<div class="avantages">
+<div class="av"><span>🚚</span><h3>Livraison Rapide</h3><p>Partout à Butembo</p></div>
+<div class="av"><span>💰</span><h3>Meilleur Prix</h3><p>Prix pour élèves</p></div>
+<div class="av"><span>⭐</span><h3>Qualité</h3><p>Produits vérifiés</p></div>
+<div class="av"><span>💬</span><h3>WhatsApp</h3><p>Commande facile</p></div>
+</div>
+</div>
+
+<!-- 7. À PROPOS -->
+<div class="section" id="apropos">
+<h2>🏫 À Propos de HK Papeterie</h2>
+<div class="apropos">
+<p><b>HK Papeterie</b> est ta boutique à Butembo pour tout ce qui concerne l'école et le bureau.</p>
+<p>Nous vendons cahiers, sacs, stylos, livres, et nous aidons aussi les autres vendeurs à publier leurs produits pour que tout le monde les voie dans le monde entier.</p>
+<p>Notre mission : aider chaque élève à réussir avec du bon matériel, à bon prix.</p>
+</div>
+</div>
+
+<!-- 8. CONTACT -->
+<div class="section" id="contact">
+<h2>📞 Contacte-nous</h2>
+<div class="contact-box">
+📍 Adresse : Butembo, Kitatumba, RDC<br>
+📱 WhatsApp : <a href="https://wa.me/243976053534">0976 053 534</a><br>
+📧 Email : hkpapeterie@gmail.com<br>
+🕒 Ouvert : Lundi - Samedi, 7h30 - 18h30
+</div>
+</div>
+
+<footer>
+<b>🏫 HK Papeterie - Butembo</b><br>
+© 2026 HK Papeterie. Tous droits réservés.<br>
+<a href="upload.html" style="color:#FFC107">Publier un produit</a> | <a href="gallery.html" style="color:#FFC107">Galerie</a>
+</footer>
+
+<a class="whatsapp" href="https://wa.me/243976053534">💬</a>
 
 <script>
 const BASE = "https://tphk-gallery-default-rtdb.firebaseio.com";
@@ -40,7 +160,7 @@ async function afficherProduits(){
   try{
     let res = await fetch(BASE + "/produits.json");
     let data = await res.json();
-    if(!data){ zone.innerHTML = '<p style="text-align:center">Aucun produit pour le moment. Sois le premier !</p>'; return; }
+    if(!data){ zone.innerHTML = '<p style="text-align:center">Aucun produit pour le moment. Sois le premier ! <a href="upload.html">Publier</a></p>'; return; }
     let entrees = Object.entries(data).reverse();
     zone.innerHTML = entrees.map(([id,p])=>`
       <div class="papeterie-card">
@@ -50,13 +170,13 @@ async function afficherProduits(){
           <h4>${p.nom}</h4>
           <p>${p.desc||''}</p>
           <p>📍 ${p.adresse}<br>📱 ${p.tel}<br>📅 ${p.date||''}</p>
-          <span class="prix">${p.prix} FC</span><br><br>
-          <a href="https://wa.me/243${String(p.tel).replace(/[^0-9]/g,'').slice(-9)}" style="display:inline-block;background:#25D366;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold">Commander</a>
+          <span class="prix">${p.prix} FC</span><br>
+          <a href="https://wa.me/243${String(p.tel).replace(/[^0-9]/g,'').slice(-9)}" class="btn-commander">Commander</a>
           ${EST_ADMIN ? `<button class="btn-supprimer" onclick="supprimerProduit('${id}')">🗑 Supprimer</button>` : ''}
         </div>
       </div>`).join('');
   }catch(e){
-    zone.innerHTML = '<p style="text-align:center">Pas de connexion. Vérifie ton internet et réactualise.</p>';
+    zone.innerHTML = '<p style="text-align:center">Pas de connexion. Vérifie ton internet.</p>';
   }
 }
 async function supprimerProduit(id){
