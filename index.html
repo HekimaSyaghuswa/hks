@@ -10,17 +10,18 @@
   header{background:#0b4f8a;color:white;padding:18px 5%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
   header h1{font-size:22px}
   header nav a{color:white;text-decoration:none;margin-left:18px;font-weight:600}
-  /* BANDE BLEUE GALERIE */
-  .bande-galerie{background:#0b4f8a;color:white;text-align:center;padding:30px 5% 25px}
-  .bande-galerie h2{font-size:24px;margin-bottom:15px;line-height:1.4}
-  .bande-galerie .btn-galerie{display:block;background:#25D366;color:white;padding:15px;text-align:center;border-radius:10px;margin:10px auto;max-width:600px;text-decoration:none;font-weight:bold;font-size:17px}
-  .bande-galerie .btn-envoyer{display:block;background:white;color:black;padding:15px;text-align:center;border-radius:10px;margin:10px auto;max-width:600px;text-decoration:none;font-weight:bold;font-size:17px}
-  /* HERO - PHOTO FILIGRANE PLUS VISIBLE */
+  /* HERO - PHOTO FILIGRANE BIEN VISIBLE */
   .hero{background:linear-gradient(rgba(11,79,138,0.45), rgba(30,136,229,0.35)), url('fond-bleu.jpg');background-size:cover;background-position:center;color:white;padding:70px 5%;text-align:center}
   .hero img{width:170px;height:170px;object-fit:cover;border-radius:50%;border:4px solid white;margin-bottom:15px;background:white}
   .hero h2{font-size:34px;margin-bottom:8px;text-shadow:0 2px 10px rgba(0,0,0,0.6)}
   .hero .slogan{font-size:19px;font-style:italic;background:rgba(0,0,0,0.45);display:inline-block;padding:8px 20px;border-radius:30px;margin:10px 0 20px}
   .hero p{max-width:650px;margin:0 auto 20px;text-shadow:0 1px 8px rgba(0,0,0,0.6);font-weight:500}
+  /* BANDE BLEUE GALERIE - MAINTENANT EN BAS DU HERO */
+  .bande-galerie{background:#0b4f8a;color:white;text-align:center;padding:30px 5% 25px}
+  .bande-galerie h2{font-size:24px;margin-bottom:10px;line-height:1.4}
+  .bande-galerie p{font-size:17px;font-weight:600;margin-bottom:20px;line-height:1.4}
+  .bande-galerie .btn-galerie{display:block;background:#25D366;color:white;padding:15px;text-align:center;border-radius:10px;margin:10px auto;max-width:600px;text-decoration:none;font-weight:bold;font-size:17px}
+  .bande-galerie .btn-envoyer{display:block;background:white;color:black;padding:15px;text-align:center;border-radius:10px;margin:10px auto;max-width:600px;text-decoration:none;font-weight:bold;font-size:17px}
   .btn{display:inline-block;background:white;color:#0b4f8a;padding:12px 25px;border-radius:30px;text-decoration:none;font-weight:bold;margin:5px}
   .btn-outline{background:transparent;color:white;border:2px solid white}
   .btn-green{display:inline-block;background:#25D366;color:white;padding:14px 28px;border-radius:30px;text-decoration:none;font-weight:bold;margin:5px}
@@ -43,20 +44,14 @@
   .mail{background:#EA4335;color:white}
   .fb{background:#1877F2;color:white}
   footer{background:#0b2a44;color:white;text-align:center;padding:25px}
-  @media(max-width:600px){header nav{display:none} .hero h2{font-size:28px} .bande-galerie h2{font-size:20px}}
+  @media(max-width:600px){header nav{display:none} .hero h2{font-size:28px} .bande-galerie h2{font-size:20px} .bande-galerie p{font-size:15px}}
 </style>
 </head>
 <body>
 
 <header><h1>HEKIMA SYAGHUSWA</h1><nav><a href="#papeterie">HK Papeterie</a><a href="#apropos">À propos</a><a href="#contact">Contact</a></nav></header>
 
-<!-- BANDE BLEUE GALERIE -->
-<div class="bande-galerie">
-  <h2>Vous pouvez voir nos autres produits ici<br>ou publier aussi vos produits dans ma galerie<br>publie ton produit ici en y mettant votre adresse et le prix et tout le monde verra votre produit</h2>
-  <a class="btn-galerie" href="gallery.html">📸 Voir la Galerie</a>
-  <a class="btn-envoyer" href="upload.html">➕ Envoyer une Photo</a>
-</div>
-
+<!-- 1. PHOTO FILIGRANE EN HAUT -->
 <div class="hero">
   <img src="photo.jpg" alt="Hekima">
   <h2>Salut, moi c'est Hekima Syaghuswa</h2>
@@ -66,6 +61,15 @@
   <a class="btn btn-outline" href="https://wa.me/243976053534">WhatsApp moi</a>
 </div>
 
+<!-- 2. BANDE BLEUE GALERIE - JUSTE EN DESSOUS DE LA PHOTO, JUSTE AU-DESSUS DE LA PAPETERIE -->
+<div class="bande-galerie">
+  <h2>Vous pouvez voir nos  produits ici<br>ou publier aussi vos produits dans ma galerie</h2>
+  <p>publie ton produit ici en y mettant votre adresse et le prix et tout le monde verra votre produit</p>
+  <a class="btn-galerie" href="gallery.html">📸 Voir la Galerie</a>
+  <a class="btn-envoyer" href="upload.html">➕ Envoyer une Photo</a>
+</div>
+
+<!-- 3. HK PAPETERIE -->
 <section id="papeterie"><div class="papeterie">
   <div style="background:#FF7A00;display:inline-block;padding:6px 18px;border-radius:20px;font-weight:bold">📍 BUTEMBO - OUVERT 8H - 18H</div>
   <h3 style="margin-top:15px">🛒 HK Papeterie - Tout pour l'École & le Bureau</h3>
@@ -75,7 +79,7 @@
     <div class="papeterie-card"><img src="machine.webp" alt="Impression HK Papeterie"><div><h4>🖨️ Impression & Photocopie</h4><p>Impression couleur, photocopie rapide, plastification, reliure, saisie de documents, CV, TFC, mémoires.</p><span class="prix">⚡ Service rapide</span></div></div>
     <div class="papeterie-card"><img src="client.webp" alt="Service client HK Papeterie"><div><h4>🤝 Je sers mes clients avec sourire</h4><p>Chez HK Papeterie, chaque client est important. Venez, on vous prépare tout avec honnêteté.</p><span class="prix">🎒 Kits scolaires dispo</span></div></div>
   </div>
-  <p style="margin-top:30px;font-size:19px"><b>🔥 PROMO RENTRÉE : -10% sur les kits scolaires !</b></p>
+  <p style="margin-top:30px;font-size:19px"><b>vous servir c'est mon Devoir !</b></p>
   <a class="btn-green" href="https://wa.me/243976053534?text=Bonjour%20HK%20Papeterie%2C%20je%20veux%20commander">📱 Commander sur WhatsApp</a>
 </div></section>
 
