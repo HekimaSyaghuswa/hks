@@ -1,43 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HK Papeterie - Butembo</title>
 <style>
-/* CORRECTION PHOTO ENTIÈRE */
-.papeterie-card img{width:100%;height:auto !important;max-height:380px;object-fit:contain !important;background:#fff;display:block}
+*{box-sizing:border-box;font-family:Arial}
+body{background:#f4f6fb;margin:0;padding:0}
+header{background:#0b4f8a;color:white;padding:25px 15px;text-align:center}
+header a{display:inline-block;background:white;color:#0b4f8a;padding:12px 20px;border-radius:25px;text-decoration:none;font-weight:bold;margin:5px}
+h2{text-align:center;color:#0b4f8a;padding:20px 10px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;max-width:1000px;margin:20px auto;padding:0 15px}
+.papeterie-card{background:white;border-radius:15px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.08)}
+.papeterie-card img{width:100%;height:auto;max-height:380px;object-fit:contain;background:#fff;display:block}
+.papeterie-card div{padding:15px}
+.prix{background:#FFF3E0;color:#E65100;padding:5px 12px;border-radius:20px;font-weight:bold;display:inline-block}
 .vendeur-badge{background:#0b4f8a;color:white;padding:5px 12px;border-radius:20px;font-size:13px;font-weight:bold;display:inline-block;margin-bottom:8px}
 .btn-supprimer{background:#ff3b30;color:white;border:0;padding:8px 15px;border-radius:20px;font-weight:bold;cursor:pointer;margin-left:10px}
 </style>
+</head>
+<body>
+
+<header>
+<h1>🏫 HK Papeterie</h1>
+<p>Butembo - Tout pour l'école</p>
+<a href="upload.html">➕ Publie aussi ton produit</a>
+<a href="gallery.html">📸 Voir la galerie</a>
+</header>
+
+<h2 id="galerie-publique">🛍️ Galerie Publique - Produits de tout le monde</h2>
+<div class="grid" id="liste-produits"><p style="text-align:center">Chargement...</p></div>
 
 <script>
 const BASE = "https://tphk-gallery-default-rtdb.firebaseio.com";
-// POUR VOIR LE BOUTON SUPPRIMER : ouvre ton site avec ?admin=hk123 à la fin
-// Ex: ton-site.com/index.html?admin=hk123
 const EST_ADMIN = new URLSearchParams(window.location.search).get('admin') === 'hk123';
 
 async function afficherProduits(){
-  let zone=document.getElementById('liste-produits');
-  if(!zone) return;
-  zone.innerHTML='<p style="text-align:center">Chargement...</p>';
-  let res=await fetch(BASE+"/produits.json");
-  let data=await res.json();
-  if(!data){zone.innerHTML='<p style="text-align:center">Aucun produit.</p>';return;}
-  let entrees=Object.entries(data).reverse();
-  zone.innerHTML=entrees.map(([id,p])=>`
-    <div class="papeterie-card">
-      <img src="${p.img}">
-      <div>
-        <span class="vendeur-badge">👤 ${p.vendeur || 'Vendeur HK'}</span>
-        <h4>${p.nom}</h4>
-        <p>${p.desc||''}</p>
-        <p>📍 ${p.adresse}<br>📱 ${p.tel}<br>📅 ${p.date||''}</p>
-        <span class="prix">${p.prix} FC</span><br><br>
-        <a href="https://wa.me/243${p.tel.replace(/[^0-9]/g,'').slice(-9)}" style="display:inline-block;background:#25D366;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold">Commander</a>
-        ${EST_ADMIN ? `<button class="btn-supprimer" onclick="supprimerProduit('${id}')">🗑 Supprimer</button>` : ''}
-      </div>
-    </div>`).join('');
+  let zone = document.getElementById('liste-produits');
+  try{
+    let res = await fetch(BASE + "/produits.json");
+    let data = await res.json();
+    if(!data){ zone.innerHTML = '<p style="text-align:center">Aucun produit pour le moment. Sois le premier !</p>'; return; }
+    let entrees = Object.entries(data).reverse();
+    zone.innerHTML = entrees.map(([id,p])=>`
+      <div class="papeterie-card">
+        <img src="${p.img}">
+        <div>
+          <span class="vendeur-badge">👤 ${p.vendeur || 'Vendeur HK'}</span>
+          <h4>${p.nom}</h4>
+          <p>${p.desc||''}</p>
+          <p>📍 ${p.adresse}<br>📱 ${p.tel}<br>📅 ${p.date||''}</p>
+          <span class="prix">${p.prix} FC</span><br><br>
+          <a href="https://wa.me/243${String(p.tel).replace(/[^0-9]/g,'').slice(-9)}" style="display:inline-block;background:#25D366;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold">Commander</a>
+          ${EST_ADMIN ? `<button class="btn-supprimer" onclick="supprimerProduit('${id}')">🗑 Supprimer</button>` : ''}
+        </div>
+      </div>`).join('');
+  }catch(e){
+    zone.innerHTML = '<p style="text-align:center">Pas de connexion. Vérifie ton internet et réactualise.</p>';
+  }
 }
 async function supprimerProduit(id){
   if(!confirm("Supprimer ce produit ?")) return;
   await fetch(BASE+"/produits/"+id+".json",{method:"DELETE"});
-  alert("Supprimé !");
   afficherProduits();
 }
 afficherProduits();
 </script>
+</body>
+</html>
