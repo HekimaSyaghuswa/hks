@@ -2,69 +2,52 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Uploader une photo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Envoyer un produit - HK Papeterie</title>
 <style>
-body{font-family:Arial;text-align:center;padding:30px;background:#f4f6fb}
-.box{background:white;padding:25px;border-radius:15px;max-width:400px;margin:auto;box-shadow:0 4px 15px rgba(0,0,0,.1)}
-input{margin:15px 0}
-img{width:100%;border-radius:10px;margin-top:15px;display:none}
-button{background:#0b4f8a;color:white;border:none;padding:12px 20px;border-radius:20px;font-weight:bold;cursor:pointer}
+*{box-sizing:border-box;font-family:Arial} body{background:#f4f6fb;margin:0;padding:20px}
+.box{max-width:500px;margin:auto;background:white;padding:25px;border-radius:15px}
+h2{color:#0b4f8a;text-align:center} input,textarea{width:100%;padding:13px;margin:8px 0;border:1px solid #ddd;border-radius:10px}
+button{width:100%;background:#25D366;color:white;border:0;padding:15px;border-radius:10px;font-weight:bold;font-size:17px}
+a{display:block;text-align:center;margin-top:15px;color:#0b4f8a;font-weight:bold}
+img{width:100%;border-radius:10px;margin-top:10px;display:none}
 </style>
 </head>
 <body>
 <div class="box">
-  <h2>📸 Envoie ta photo</h2>
-  <input type="file" id="photo" accept="image/*">
-  <br>
-  <input type="text" id="name" placeholder="Ton nom (ex: Hekima)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:none;">
-
-<textarea id="desc" placeholder="Description... (ex: jolie voiture)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:none;"></textarea>
-
-<button onclick="envoyer()">Envoyer sur le Cloud</button>
-<p id="status"></p>
-  <p id="status"></p>
-  <img id="resultat">
-  <p id="lien"></p>
+<h2>➕ Publie ton produit</h2>
+<p style="text-align:center">Tout le monde verra ton produit en bas de la page Papeterie</p>
+<input id="nom" placeholder="Nom du produit * ex: Sac à dos">
+<input id="prix" placeholder="Prix * ex: 15000 FC">
+<input id="adresse" placeholder="Ton adresse * ex: Butembo, Quartier Kitatumba">
+<input id="tel" placeholder="Ton WhatsApp / Téléphone * ex: 0976053534">
+<textarea id="desc" placeholder="Description du produit"></textarea>
+<label><b>Photo du produit *</b></label>
+<input type="file" id="photo" accept="image/*">
+<img id="preview">
+<button onclick="publier()">📤 Publier mon produit</button>
+<a href="index.html">⬅ Retour à l'accueil</a>
+<a href="gallery.html">📸 Voir la Galerie</a>
 </div>
-
 <script>
-async function envoyer(){
-  const fichier = document.getElementById('photo').files[0];
-  if(!fichier){ alert("Choisis d'abord une photo"); return; }
-  document.getElementById('status').innerText = "Envoi en cours... ⏳";
-  const formData = new FormData();
-  formData.append('file', fichier);
-  formData.append('upload_preset', 'photos_projet');
-  formData.append('tags', 'tphk_gallery');
-  const res = await fetch('https://api.cloudinary.com/v1_1/sogn1cr8/image/upload', {
-    method: 'POST',
-    body: formData
-  });
-  const data = await res.json();
-  if(data.secure_url){
-    document.getElementById('status').innerText = "✅ Photo sauvegardée !";
-    // Sauvegarde l'URL pour la galerie
-// Envoie le lien dans Firebase automatiquement
-// Envoie le lien + nom + description dans Firebase
-let nom = document.getElementById('name').value || "Anonyme";
-let description = document.getElementById('desc').value || "";
-
-fetch('https://tphk-gallery-default-rtdb.firebaseio.com/photos.json', {
-  method: 'POST',
-  body: JSON.stringify({ 
-    url: data.secure_url, 
-    name: nom,
-    desc: description,
-    date: Date.now() 
-  })
+let imgData="";
+document.getElementById('photo').addEventListener('change',e=>{
+  let r=new FileReader();
+  r.onload=()=>{imgData=r.result;let p=document.getElementById('preview');p.src=imgData;p.style.display='block';};
+  r.readAsDataURL(e.target.files[0]);
 });
-    const img = document.getElementById('resultat');
-    img.src = data.secure_url;
-    img.style.display = 'block';
-    document.getElementById('lien').innerHTML = `<a href="${data.secure_url}" target="_blank">Voir le lien de la photo</a>`;
-  } else {
-    document.getElementById('status').innerText = "❌ Erreur : " + JSON.stringify(data);
-  }
+function publier(){
+  let nom=document.getElementById('nom').value.trim();
+  let prix=document.getElementById('prix').value.trim();
+  let adresse=document.getElementById('adresse').value.trim();
+  let tel=document.getElementById('tel').value.trim();
+  let desc=document.getElementById('desc').value.trim();
+  if(!nom||!prix||!adresse||!tel||!imgData){alert("Remplis Nom, Prix, Adresse, Téléphone et Photo !");return;}
+  let produits=JSON.parse(localStorage.getItem('hk_produits')||'[]');
+  produits.unshift({nom,prix,adresse,tel,desc,img:imgData,date:new Date().toLocaleDateString()});
+  localStorage.setItem('hk_produits',JSON.stringify(produits));
+  alert("Produit publié ! Il est maintenant visible en bas de la Papeterie");
+  window.location.href='index.html#galerie-publique';
 }
 </script>
 </body>

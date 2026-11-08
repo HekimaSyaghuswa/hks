@@ -82,6 +82,40 @@
   <p style="margin-top:30px;font-size:19px"><b>vous servir c'est mon Devoir !</b></p>
   <a class="btn-green" href="https://wa.me/243976053534?text=Bonjour%20HK%20Papeterie%2C%20je%20veux%20commander">📱 Commander sur WhatsApp</a>
 </div></section>
+<!-- GALERIE PUBLIQUE VISIBLE DIRECTEMENT -->
+<section id="galerie-publique" style="padding-top:0">
+  <h3>🛍️ Produits de la Communauté - Galerie Publique</h3>
+  <p style="text-align:center;margin-bottom:20px">Voici les produits publiés par tout le monde. Pas besoin de cliquer, ils sont déjà là !</p>
+  <div id="liste-produits" class="papeterie-grid"></div>
+  <div style="text-align:center;margin-top:20px">
+    <a href="upload.html" style="display:inline-block;background:#25D366;color:white;padding:14px 25px;border-radius:30px;text-decoration:none;font-weight:bold">➕ Publie aussi ton produit</a>
+    <a href="gallery.html" style="display:inline-block;background:#0b4f8a;color:white;padding:14px 25px;border-radius:30px;text-decoration:none;font-weight:bold;margin-left:10px">📸 Voir toute la Galerie</a>
+  </div>
+</section>
+
+<script>
+function afficherProduits(){
+  let zone=document.getElementById('liste-produits');
+  if(!zone) return;
+  let produits=JSON.parse(localStorage.getItem('hk_produits')||'[]');
+  if(produits.length==0){
+    zone.innerHTML='<p style="text-align:center;grid-column:1/-1;background:white;padding:25px;border-radius:15px">Aucun produit pour le moment. Sois le premier à publier ! 👆</p>';
+    return;
+  }
+  zone.innerHTML=produits.map(p=>`
+    <div class="papeterie-card">
+      <img src="${p.img}">
+      <div>
+        <h4>${p.nom}</h4>
+        <p>${p.desc||''}</p>
+        <p>📍 ${p.adresse}<br>📱 ${p.tel}<br>📅 ${p.date}</p>
+        <span class="prix">${p.prix} FC</span><br><br>
+        <a href="https://wa.me/243${p.tel.replace(/[^0-9]/g,'').slice(-9)}?text=Bonjour, je veux ${encodeURIComponent(p.nom)}" style="display:inline-block;background:#25D366;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold">Commander</a>
+      </div>
+    </div>`).join('');
+}
+afficherProduits();
+</script>
 
 <section id="apropos"><h3>Qui suis-je ?</h3><div class="about-box"><p>Je m'appelle <b>Hekima Syaghuswa</b>, je vis à <b>Butembo, Nord-Kivu (RDC)</b>. Étudiant à l'<b>UAC Butembo</b> en <b>Gestion Informatique</b> et fondateur de <b>HK Papeterie</b>. Je suis <b>catholique</b> et ma mission est de prôner la <b>sagesse</b> et l'<b>honnêteté</b>.</p></div></section>
 
