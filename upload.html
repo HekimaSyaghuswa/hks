@@ -7,7 +7,10 @@
 <div class="box">
 <h2>➕ Publie ton produit</h2>
 <p style="text-align:center">Tout le monde dans le monde entier verra ton produit !</p>
+
+<!-- ICI LES CHAMPS -->
 <input id="nom" placeholder="Nom du produit * ex: Sac à dos">
+<input id="vendeur" placeholder="Ton nom / Ta place * ex: HK Papeterie - Butembo">
 <input id="prix" placeholder="Prix * ex: 15000 FC">
 <input id="adresse" placeholder="Ton adresse * ex: Butembo, Kitatumba">
 <input id="tel" placeholder="Ton WhatsApp * ex: 0976053534">
@@ -31,15 +34,18 @@ document.getElementById('photo').addEventListener('change',e=>{
     }; img.src=ev.target.result;
   }; reader.readAsDataURL(file);
 });
+
+// C'EST ICI SUR TA CAPTURE, LIGNE 35 À 46, TU REMPLACES TOUT ÇA :
 async function publier(){
   let nom=document.getElementById('nom').value.trim();
+  let vendeur=document.getElementById('vendeur').value.trim() || "Vendeur HK";
   let prix=document.getElementById('prix').value.trim();
   let adresse=document.getElementById('adresse').value.trim();
   let tel=document.getElementById('tel').value.trim();
   let desc=document.getElementById('desc').value.trim();
   if(!nom||!prix||!adresse||!tel||!imgData){alert("Remplis Nom, Prix, Adresse, Téléphone et Photo !");return;}
   document.getElementById('btn').innerText="Envoi en cours...";
-  await fetch(BASE+"/produits.json",{method:"POST",body:JSON.stringify({nom,prix,adresse,tel,desc,img:imgData,date:new Date().toLocaleDateString()})});
+  await fetch(BASE+"/produits.json",{method:"POST",body:JSON.stringify({nom,vendeur,prix,adresse,tel,desc,img:imgData,date:new Date().toLocaleDateString()})});
   alert("Publié ! Tout le monde peut maintenant le voir !");
   window.location.href='index.html#galerie-publique';
 }
