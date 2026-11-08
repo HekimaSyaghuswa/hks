@@ -3,9 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hekima Syaghuswa - Mon Identité</title>
+<title>Hekima Syaghuswa - Mon Identité | HK Papeterie Butembo</title>
 <a href="gallery.html" style="display:block; background:#25D366; color:white; padding:15px; text-align:center; border-radius:10px; margin:10px; text-decoration:none; font-weight:bold;">📸 Voir la Galerie</a>
-
 <a href="upload.html" style="display:block; background:white; color:black; padding:15px; text-align:center; border-radius:10px; margin:10px; text-decoration:none; font-weight:bold;">➕ Envoyer une Photo</a>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
@@ -13,13 +12,15 @@
   header{background:#0b4f8a;color:white;padding:18px 5%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
   header h1{font-size:22px}
   header nav a{color:white;text-decoration:none;margin-left:18px;font-weight:600}
-  .hero{background:linear-gradient(rgba(11,79,138,0.88), rgba(30,136,229,0.82)), url('fond-bleu.jpg.jpeg');background-size:cover;background-position:center;background-repeat:no-repeat;color:white;padding:70px 5%;text-align:center}
+  .hero{background:linear-gradient(rgba(11,79,138,0.88), rgba(30,136,229,0.82)), url('fond-bleu.jpg');background-size:cover;background-position:center;background-repeat:no-repeat;color:white;padding:70px 5%;text-align:center}
   .hero img{width:170px;height:170px;object-fit:cover;border-radius:50%;border:4px solid white;margin-bottom:15px;background:white}
   .hero h2{font-size:34px;margin-bottom:8px}
   .hero .slogan{font-size:19px;font-style:italic;background:rgba(255,255,255,.15);display:inline-block;padding:8px 20px;border-radius:30px;margin:10px 0 20px}
   .hero p{max-width:650px;margin:0 auto 20px;opacity:.95}
   .btn{display:inline-block;background:white;color:#0b4f8a;padding:12px 25px;border-radius:30px;text-decoration:none;font-weight:bold;margin:5px}
   .btn-outline{background:transparent;color:white;border:2px solid white}
+  .btn-green{display:inline-block;background:#25D366;color:white;padding:14px 28px;border-radius:30px;text-decoration:none;font-weight:bold;margin:5px}
+  .btn-orange{display:inline-block;background:#FF7A00;color:white;padding:14px 28px;border-radius:30px;text-decoration:none;font-weight:bold;margin:5px}
   section{padding:50px 5%;max-width:1000px;margin:auto}
   h3{font-size:28px;color:#0b4f8a;margin-bottom:20px;text-align:center}
   .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
@@ -28,9 +29,15 @@
   .about-box{background:white;padding:30px;border-radius:15px;box-shadow:0 4px 15px rgba(0,0,0,.08)}
   .info{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
   .info div{background:#eaf2fb;padding:10px 18px;border-radius:20px;font-weight:600}
-  .projet{background:white;border-radius:15px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,.08)}
-  .projet img{width:100%;height:180px;object-fit:cover}
-  .projet div{padding:20px}
+  .papeterie{background:linear-gradient(135deg,#0b4f8a,#1e88e5);color:white;padding:50px 5%;border-radius:20px;margin:20px auto;max-width:1000px;text-align:center}
+  .papeterie h3{color:white;font-size:32px}
+  .papeterie .sous-titre{font-size:19px;opacity:.95;margin-bottom:25px}
+  .papeterie-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-top:25px;text-align:left}
+  .papeterie-card{background:white;color:#222;border-radius:15px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,.2)}
+  .papeterie-card img{width:100%;height:200px;object-fit:cover}
+  .papeterie-card div{padding:18px}
+  .papeterie-card h4{color:#0b4f8a;margin-bottom:8px}
+  .prix{background:#FFF3E0;color:#E65100;display:inline-block;padding:5px 12px;border-radius:20px;font-weight:bold;font-size:14px;margin-top:10px}
   .citation{background:#0b4f8a;color:white;padding:35px;border-radius:15px;text-align:center;font-size:20px;font-style:italic}
   .contact-box{background:white;padding:30px;border-radius:15px;box-shadow:0 4px 15px rgba(0,0,0,.08);text-align:center}
   .contact-box a{display:inline-block;margin:8px;padding:12px 20px;border-radius:30px;text-decoration:none;font-weight:bold}
@@ -45,27 +52,70 @@
 
 <header>
   <h1>HEKIMA SYAGHUSWA</h1>
-  <nav><a href="#apropos">À propos</a><a href="#valeurs">Valeurs</a><a href="#projets">Projets</a><a href="#contact">Contact</a></nav>
+  <nav><a href="#apropos">À propos</a><a href="#papeterie">HK Papeterie</a><a href="#valeurs">Valeurs</a><a href="#contact">Contact</a></nav>
 </header>
 
 <div class="hero">
   <img src="photo.jpg" alt="Photo de Hekima Syaghuswa">
   <h2>Salut, moi c'est Hekima Syaghuswa</h2>
   <div class="slogan">« La Sagesse et l'Honnêteté avant tout »</div>
-  <p>Jeune étudiant en Gestion Informatique à l'UAC Butembo, entrepreneur en informatique et catholique engagé. Je crois que la technologie doit servir avec sagesse et honnêteté.</p>
-  <a class="btn" href="#apropos">Découvrir mon histoire</a>
+  <p>Jeune étudiant en Gestion Informatique à l'UAC Butembo, entrepreneur en informatique et catholique engagé. Fondateur de <b>HK Papeterie</b> à Butembo.</p>
+  <a class="btn" href="#papeterie">🛒 Voir ma Papeterie</a>
   <a class="btn btn-outline" href="https://wa.me/243976053534">WhatsApp moi</a>
 </div>
+
+<!-- ===== HK PAPETERIE - MARKETING ===== -->
+<section id="papeterie" style="padding:20px 5%">
+  <div class="papeterie">
+    <div style="background:#FF7A00;display:inline-block;padding:6px 18px;border-radius:20px;font-weight:bold;font-size:14px">📍 BUTEMBO - NORD-KIVU | OUVERT 8H - 18H</div>
+    <h3 style="margin-top:15px">🛒 HK Papeterie - Tout pour l'École & le Bureau</h3>
+    <p class="sous-titre">La papeterie de confiance à Butembo. Prix abordables, qualité garantie, service rapide et honnête.<br><b>Élèves, étudiants, enseignants, entreprises : bienvenue chez HK !</b></p>
+
+    <div class="papeterie-grid">
+      <div class="papeterie-card">
+        <img src="papeterie1.jpg" alt="Boutique HK Papeterie Butembo">
+        <div>
+          <h4>🏪 Notre Boutique à Butembo</h4>
+          <p>Cahiers, sacs à dos, papiers A4, stylos, et tout ce qu'il faut pour réussir l'année scolaire. Venez visiter, vous serez bien accueillis !</p>
+          <span class="prix">✅ Prix étudiants</span>
+        </div>
+      </div>
+
+      <div class="papeterie-card">
+        <img src="papeterie2.jpg" alt="Fournitures scolaires HK Papeterie">
+        <div>
+          <h4>✏️ Fournitures Scolaires & Bureau</h4>
+          <p>Cahiers, stylos, crayons, règles, surligneurs, chemises, colle, ciseaux, calculatrices, agrafeuses. Tout pour l'école et le bureau, en gros et en détail.</p>
+          <span class="prix">🎒 Kits scolaires dispo</span>
+        </div>
+      </div>
+
+      <div class="papeterie-card">
+        <img src="papeterie3.jpg" alt="Impression et photocopie HK Papeterie">
+        <div>
+          <h4>🖨️ Impression, Photocopie & Plastification</h4>
+          <p>Impression couleur / noir-blanc, photocopie rapide, plastification, reliure, saisie et mise en page de vos documents, CV, TFC, mémoires.</p>
+          <span class="prix">⚡ Service rapide</span>
+        </div>
+      </div>
+    </div>
+
+    <p style="margin-top:30px;font-size:19px"><b>🔥 PROMO RENTRÉE : -10% sur les kits scolaires complets !</b><br>Commandez sur WhatsApp, on vous prépare tout !</p>
+    <a class="btn-green" href="https://wa.me/243976053534?text=Bonjour%20HK%20Papeterie%2C%20je%20veux%20commander%20des%20fournitures">📱 Commander sur WhatsApp</a>
+    <a class="btn-orange" href="#contact">📍 Nous trouver</a>
+    <p style="margin-top:15px;opacity:.9">📍 Butembo, Nord-Kivu - RDC | 📱 +243 976 053 534</p>
+  </div>
+</section>
 
 <section id="apropos">
   <h3>Qui suis-je ?</h3>
   <div class="about-box">
     <p>Je m'appelle <b>Hekima Syaghuswa</b>, je vis à <b>Butembo, Nord-Kivu (RDC)</b>.</p>
     <p>Je suis jeune étudiant à l'<b>Université de l'Assomption au Congo (UAC) Butembo</b>, en <b>Gestion Informatique</b>.</p>
-    <p>En dehors des cours, je suis <b>entrepreneur en informatique</b> : je crée des sites web, j'aide les gens et les petites entreprises à être visibles sur internet.</p>
+    <p>En dehors des cours, je suis <b>entrepreneur en informatique</b> et fondateur de <b>HK Papeterie</b> : je crée des sites web, je vends des fournitures scolaires et je fais des services d'impression pour aider les gens et les petites entreprises à être visibles.</p>
     <p><b>Ma foi :</b> Je suis <b>catholique</b>. Ma foi m'apprend la discipline, le respect des autres et le service.</p>
     <p><b>Ma mission :</b> Prôner toujours la <b>sagesse</b> et l'<b>honnêteté</b> dans tout ce que je fais.</p>
-    <div class="info"><div>📍 Butembo, RDC</div><div>🎓 UAC Butembo</div><div>💻 Gestion Informatique</div><div>🙏 Catholique</div><div>💡 Entrepreneur</div></div>
+    <div class="info"><div>📍 Butembo, RDC</div><div>🎓 UAC Butembo</div><div>💻 Gestion Informatique</div><div>🙏 Catholique</div><div>💡 Fondateur HK Papeterie</div></div>
   </div>
 </section>
 
@@ -83,22 +133,22 @@
 <section id="projets">
   <h3>Ce que je fais</h3>
   <div class="cards">
+    <div class="card"><span>🛒</span><h4>HK Papeterie</h4><p>Ma papeterie à Butembo : fournitures scolaires, impression, photocopie, plastification, à prix abordables pour tous.</p></div>
     <div class="card"><span>💻</span><h4>Création de Sites Web</h4><p>Je crée des sites web simples, rapides et beaux pour les entreprises, les écoles, les églises et les particuliers à Butembo.</p></div>
     <div class="card"><span>🎓</span><h4>Études en Gestion Informatique</h4><p>Étudiant à l'UAC Butembo, j'apprends la gestion, la programmation et les bases de données.</p></div>
-    <div class="card"><span>🤝</span><h4>Partage & Mentorat</h4><p>J'aime partager ce que j'apprends pour aider les jeunes de Butembo à avancer.</p></div>
   </div>
 </section>
 
 <section id="contact">
-  <h3>Contacte-moi</h3>
+  <h3>Contacte-moi / HK Papeterie</h3>
   <div class="contact-box">
-    <p style="margin-bottom:20px">📍 Butembo, Nord-Kivu - RDC<br>Tu as un projet, une question ou tu veux juste discuter ? Écris-moi !</p>
+    <p style="margin-bottom:20px">📍 Butembo, Nord-Kivu - RDC<br>Tu as un projet, une commande pour la papeterie, ou tu veux juste discuter ? Écris-moi !</p>
     <a class="wa" href="https://wa.me/243976053534">📱 WhatsApp : +243 976 053 534</a><br>
     <a class="mail" href="mailto:hkkakule@gmail.com">📧 Gmail : hkkakule@gmail.com</a><br>
     <a class="fb" href="https://www.facebook.com/search/top?q=Hekima%20Syaghuswa">📘 Facebook : Hekima Syaghuswa</a>
   </div>
 </section>
 
-<footer><p>© 2026 Hekima Syaghuswa - Fait avec ❤️ et Sagesse à Butembo</p></footer>
+<footer><p>© 2026 Hekima Syaghuswa - HK Papeterie - Fait avec ❤️ et Sagesse à Butembo</p></footer>
 </body>
 </html>
