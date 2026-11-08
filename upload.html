@@ -1,52 +1,46 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Envoyer un produit - HK Papeterie</title>
-<style>
-*{box-sizing:border-box;font-family:Arial} body{background:#f4f6fb;margin:0;padding:20px}
-.box{max-width:500px;margin:auto;background:white;padding:25px;border-radius:15px}
-h2{color:#0b4f8a;text-align:center} input,textarea{width:100%;padding:13px;margin:8px 0;border:1px solid #ddd;border-radius:10px}
-button{width:100%;background:#25D366;color:white;border:0;padding:15px;border-radius:10px;font-weight:bold;font-size:17px}
-a{display:block;text-align:center;margin-top:15px;color:#0b4f8a;font-weight:bold}
-img{width:100%;border-radius:10px;margin-top:10px;display:none}
-</style>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Publier - HK</title>
+<style>*{box-sizing:border-box;font-family:Arial}body{background:#f4f6fb;margin:0;padding:20px}.box{max-width:500px;margin:auto;background:white;padding:25px;border-radius:15px}h2{color:#0b4f8a;text-align:center}input,textarea{width:100%;padding:13px;margin:8px 0;border:1px solid #ddd;border-radius:10px}button{width:100%;background:#25D366;color:white;border:0;padding:15px;border-radius:10px;font-weight:bold;font-size:17px}a{display:block;text-align:center;margin-top:15px;color:#0b4f8a;font-weight:bold}img{width:100%;border-radius:10px;margin-top:10px;display:none}</style>
 </head>
 <body>
 <div class="box">
 <h2>➕ Publie ton produit</h2>
-<p style="text-align:center">Tout le monde verra ton produit en bas de la page Papeterie</p>
+<p style="text-align:center">Tout le monde dans le monde entier verra ton produit !</p>
 <input id="nom" placeholder="Nom du produit * ex: Sac à dos">
 <input id="prix" placeholder="Prix * ex: 15000 FC">
-<input id="adresse" placeholder="Ton adresse * ex: Butembo, Quartier Kitatumba">
-<input id="tel" placeholder="Ton WhatsApp / Téléphone * ex: 0976053534">
-<textarea id="desc" placeholder="Description du produit"></textarea>
+<input id="adresse" placeholder="Ton adresse * ex: Butembo, Kitatumba">
+<input id="tel" placeholder="Ton WhatsApp * ex: 0976053534">
+<textarea id="desc" placeholder="Description"></textarea>
 <label><b>Photo du produit *</b></label>
-<input type="file" id="photo" accept="image/*">
-<img id="preview">
-<button onclick="publier()">📤 Publier mon produit</button>
-<a href="index.html">⬅ Retour à l'accueil</a>
-<a href="gallery.html">📸 Voir la Galerie</a>
+<input type="file" id="photo" accept="image/*"><img id="preview">
+<button id="btn" onclick="publier()">📤 Publier pour tout le monde</button>
+<a href="index.html">⬅ Retour</a>
 </div>
 <script>
+const BASE = "https://tphk-gallery-default-rtdb.firebaseio.com";
 let imgData="";
 document.getElementById('photo').addEventListener('change',e=>{
-  let r=new FileReader();
-  r.onload=()=>{imgData=r.result;let p=document.getElementById('preview');p.src=imgData;p.style.display='block';};
-  r.readAsDataURL(e.target.files[0]);
+  let file=e.target.files[0]; let reader=new FileReader();
+  reader.onload=ev=>{
+    let img=new Image(); img.onload=()=>{
+      let c=document.createElement('canvas'); let max=800; let w=img.width,h=img.height;
+      if(w>max){h=h*max/w;w=max;} c.width=w;c.height=h; c.getContext('2d').drawImage(img,0,0,w,h);
+      imgData=c.toDataURL('image/jpeg',0.7);
+      let p=document.getElementById('preview'); p.src=imgData; p.style.display='block';
+    }; img.src=ev.target.result;
+  }; reader.readAsDataURL(file);
 });
-function publier(){
+async function publier(){
   let nom=document.getElementById('nom').value.trim();
   let prix=document.getElementById('prix').value.trim();
   let adresse=document.getElementById('adresse').value.trim();
   let tel=document.getElementById('tel').value.trim();
   let desc=document.getElementById('desc').value.trim();
   if(!nom||!prix||!adresse||!tel||!imgData){alert("Remplis Nom, Prix, Adresse, Téléphone et Photo !");return;}
-  let produits=JSON.parse(localStorage.getItem('hk_produits')||'[]');
-  produits.unshift({nom,prix,adresse,tel,desc,img:imgData,date:new Date().toLocaleDateString()});
-  localStorage.setItem('hk_produits',JSON.stringify(produits));
-  alert("Produit publié ! Il est maintenant visible en bas de la Papeterie");
+  document.getElementById('btn').innerText="Envoi en cours...";
+  await fetch(BASE+"/produits.json",{method:"POST",body:JSON.stringify({nom,prix,adresse,tel,desc,img:imgData,date:new Date().toLocaleDateString()})});
+  alert("Publié ! Tout le monde peut maintenant le voir !");
   window.location.href='index.html#galerie-publique';
 }
 </script>

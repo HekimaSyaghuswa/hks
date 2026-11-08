@@ -56,7 +56,7 @@
   <img src="photo.jpg" alt="Hekima">
   <h2>Salut, moi c'est Hekima Syaghuswa</h2>
   <div class="slogan">« La Sagesse et l'Honnêteté avant tout »</div>
-  <p>Étudiant en Gestion Informatique à l'UAC Butembo et fondateur de <b>HK Papeterie</b> à Butembo.</p>
+  <p>Étudiant en Gestion Informatique à l'UAC Butembo et PDG de <b>HK Papeterie</b> à Butembo.</p>
   <a class="btn" href="#papeterie">🛒 Voir ma Papeterie</a>
   <a class="btn btn-outline" href="https://wa.me/243976053534">WhatsApp moi</a>
 </div>
@@ -73,7 +73,7 @@
 <section id="papeterie"><div class="papeterie">
   <div style="background:#FF7A00;display:inline-block;padding:6px 18px;border-radius:20px;font-weight:bold">📍 BUTEMBO - OUVERT 8H - 18H</div>
   <h3 style="margin-top:15px">🛒 HK Papeterie - Tout pour l'École & le Bureau</h3>
-  <p>La papeterie de confiance à Butembo. Prix abordables, qualité garantie, service rapide et honnête.</p>
+  <p>La papeterie de confiance . Prix abordables, qualité garantie, service rapide et honnête.</p>
   <div class="papeterie-grid">
     <div class="papeterie-card"><img src="patron.webp" alt="Patron HK Papeterie"><div><h4>🏪 Bienvenue chez HK Papeterie</h4><p>C'est moi-même qui vous accueille. Cahiers, sacs, papiers A4, stylos, tout pour réussir.</p><span class="prix">✅ Prix étudiants</span></div></div>
     <div class="papeterie-card"><img src="machine.webp" alt="Impression HK Papeterie"><div><h4>🖨️ Impression & Photocopie</h4><p>Impression couleur, photocopie rapide, plastification, reliure, saisie de documents, CV, TFC, mémoires.</p><span class="prix">⚡ Service rapide</span></div></div>
@@ -94,25 +94,23 @@
 </section>
 
 <script>
-function afficherProduits(){
+const BASE = "https://tphk-gallery-default-rtdb.firebaseio.com";
+async function afficherProduits(){
   let zone=document.getElementById('liste-produits');
   if(!zone) return;
-  let produits=JSON.parse(localStorage.getItem('hk_produits')||'[]');
-  if(produits.length==0){
-    zone.innerHTML='<p style="text-align:center;grid-column:1/-1;background:white;padding:25px;border-radius:15px">Aucun produit pour le moment. Sois le premier à publier ! 👆</p>';
-    return;
-  }
-  zone.innerHTML=produits.map(p=>`
-    <div class="papeterie-card">
-      <img src="${p.img}">
-      <div>
-        <h4>${p.nom}</h4>
-        <p>${p.desc||''}</p>
-        <p>📍 ${p.adresse}<br>📱 ${p.tel}<br>📅 ${p.date}</p>
-        <span class="prix">${p.prix} FC</span><br><br>
-        <a href="https://wa.me/243${p.tel.replace(/[^0-9]/g,'').slice(-9)}?text=Bonjour, je veux ${encodeURIComponent(p.nom)}" style="display:inline-block;background:#25D366;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold">Commander</a>
-      </div>
-    </div>`).join('');
+  zone.innerHTML='<p style="text-align:center">Chargement des produits de tout le monde...</p>';
+  try{
+    let res=await fetch(BASE+"/produits.json");
+    let data=await res.json();
+    if(!data){zone.innerHTML='<p style="text-align:center;background:white;padding:25px;border-radius:15px">Aucun produit pour le moment. Sois le premier !</p>';return;}
+    let produits=Object.values(data).reverse();
+    zone.innerHTML=produits.map(p=>`
+      <div class="papeterie-card">
+        <img src="${p.img}">
+        <div><h4>${p.nom}</h4><p>${p.desc||''}</p><p>📍 ${p.adresse}<br>📱 ${p.tel}<br>📅 ${p.date||''}</p><span class="prix">${p.prix} FC</span><br><br>
+        <a href="https://wa.me/243${p.tel.replace(/[^0-9]/g,'').slice(-9)}" style="display:inline-block;background:#25D366;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold">Commander</a></div>
+      </div>`).join('');
+  }catch(e){zone.innerHTML='<p style="text-align:center">Pas de connexion. Réessaie.</p>';}
 }
 afficherProduits();
 </script>

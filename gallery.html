@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Galerie - HK</title>
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Galerie - HK</title>
 <style>*{box-sizing:border-box;font-family:Arial}body{background:#f4f6fb;margin:0;padding:20px}h2{text-align:center;color:#0b4f8a}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;max-width:1000px;margin:auto}.card{background:white;border-radius:15px;overflow:hidden}.card img{width:100%;height:220px;object-fit:cover}.card div{padding:15px}.prix{background:#FFF3E0;color:#E65100;padding:5px 12px;border-radius:20px;font-weight:bold}</style>
 </head><body>
-<h2>📸 Galerie Publique HK</h2><p style="text-align:center"><a href="index.html">⬅ Retour</a> | <a href="upload.html">➕ Publier</a></p>
-<div class="grid" id="gal"></div>
+<h2>📸 Galerie Publique HK - Tout le monde</h2><p style="text-align:center"><a href="index.html">⬅ Retour</a> | <a href="upload.html">➕ Publier</a></p>
+<div class="grid" id="gal"><p>Chargement...</p></div>
 <script>
-let p=JSON.parse(localStorage.getItem('hk_produits')||'[]');
-document.getElementById('gal').innerHTML=p.length?p.map(x=>`<div class="card"><img src="${x.img}"><div><h3>${x.nom}</h3><p>${x.desc||''}</p><p>📍 ${x.adresse}<br>📱 ${x.tel}</p><span class="prix">${x.prix} FC</span></div></div>`).join(''):'<p style="text-align:center">Aucun produit encore.</p>';
+const BASE="https://tphk-gallery-default-rtdb.firebaseio.com";
+fetch(BASE+"/produits.json").then(r=>r.json()).then(data=>{
+  let p=data?Object.values(data).reverse():[];
+  document.getElementById('gal').innerHTML=p.length?p.map(x=>`<div class="card"><img src="${x.img}"><div><h3>${x.nom}</h3><p>${x.desc||''}</p><p>📍 ${x.adresse}<br>📱 ${x.tel}</p><span class="prix">${x.prix} FC</span></div></div>`).join(''):'<p>Aucun produit.</p>';
+});
 </script></body></html>
