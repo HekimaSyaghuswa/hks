@@ -1,124 +1,43 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hekima Syaghuswa - HK Papeterie Butembo</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
-  body{background:#f4f6fb;color:#222;line-height:1.6}
-  header{background:#0b4f8a;color:white;padding:18px 5%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
-  header h1{font-size:22px}
-  header nav a{color:white;text-decoration:none;margin-left:18px;font-weight:600}
-  /* HERO - PHOTO FILIGRANE BIEN VISIBLE */
-  .hero{background:linear-gradient(rgba(11,79,138,0.45), rgba(30,136,229,0.35)), url('fond-bleu.jpg');background-size:cover;background-position:center;color:white;padding:70px 5%;text-align:center}
-  .hero img{width:170px;height:170px;object-fit:cover;border-radius:50%;border:4px solid white;margin-bottom:15px;background:white}
-  .hero h2{font-size:34px;margin-bottom:8px;text-shadow:0 2px 10px rgba(0,0,0,0.6)}
-  .hero .slogan{font-size:19px;font-style:italic;background:rgba(0,0,0,0.45);display:inline-block;padding:8px 20px;border-radius:30px;margin:10px 0 20px}
-  .hero p{max-width:650px;margin:0 auto 20px;text-shadow:0 1px 8px rgba(0,0,0,0.6);font-weight:500}
-  /* BANDE BLEUE GALERIE - MAINTENANT EN BAS DU HERO */
-  .bande-galerie{background:#0b4f8a;color:white;text-align:center;padding:30px 5% 25px}
-  .bande-galerie h2{font-size:24px;margin-bottom:10px;line-height:1.4}
-  .bande-galerie p{font-size:17px;font-weight:600;margin-bottom:20px;line-height:1.4}
-  .bande-galerie .btn-galerie{display:block;background:#25D366;color:white;padding:15px;text-align:center;border-radius:10px;margin:10px auto;max-width:600px;text-decoration:none;font-weight:bold;font-size:17px}
-  .bande-galerie .btn-envoyer{display:block;background:white;color:black;padding:15px;text-align:center;border-radius:10px;margin:10px auto;max-width:600px;text-decoration:none;font-weight:bold;font-size:17px}
-  .btn{display:inline-block;background:white;color:#0b4f8a;padding:12px 25px;border-radius:30px;text-decoration:none;font-weight:bold;margin:5px}
-  .btn-outline{background:transparent;color:white;border:2px solid white}
-  .btn-green{display:inline-block;background:#25D366;color:white;padding:14px 28px;border-radius:30px;text-decoration:none;font-weight:bold;margin:5px}
-  section{padding:50px 5%;max-width:1000px;margin:auto}
-  h3{font-size:28px;color:#0b4f8a;margin-bottom:20px;text-align:center}
-  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
-  .card{background:white;padding:25px;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,.08);text-align:center}
-  .papeterie{background:linear-gradient(135deg,#0b4f8a,#1e88e5);color:white;padding:40px 20px;border-radius:20px;text-align:center}
-  .papeterie h3{color:white}
-  .papeterie-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-top:25px;text-align:left}
-  .papeterie-card{background:white;color:#222;border-radius:15px;overflow:hidden}
-  .papeterie-card img{width:100%;height:220px;object-fit:cover}
-  .papeterie-card div{padding:18px}
-  .papeterie-card h4{color:#0b4f8a;margin-bottom:8px}
-  .prix{background:#FFF3E0;color:#E65100;display:inline-block;padding:5px 12px;border-radius:20px;font-weight:bold;font-size:14px;margin-top:10px}
-  .about-box{background:white;padding:30px;border-radius:15px;box-shadow:0 4px 15px rgba(0,0,0,.08)}
-  .contact-box{background:white;padding:30px;border-radius:15px;text-align:center}
-  .contact-box a{display:inline-block;margin:8px;padding:12px 20px;border-radius:30px;text-decoration:none;font-weight:bold}
-  .wa{background:#25D366;color:white}
-  .mail{background:#EA4335;color:white}
-  .fb{background:#1877F2;color:white}
-  footer{background:#0b2a44;color:white;text-align:center;padding:25px}
-  @media(max-width:600px){header nav{display:none} .hero h2{font-size:28px} .bande-galerie h2{font-size:20px} .bande-galerie p{font-size:15px}}
+/* CORRECTION PHOTO ENTIÈRE */
+.papeterie-card img{width:100%;height:auto !important;max-height:380px;object-fit:contain !important;background:#fff;display:block}
+.vendeur-badge{background:#0b4f8a;color:white;padding:5px 12px;border-radius:20px;font-size:13px;font-weight:bold;display:inline-block;margin-bottom:8px}
+.btn-supprimer{background:#ff3b30;color:white;border:0;padding:8px 15px;border-radius:20px;font-weight:bold;cursor:pointer;margin-left:10px}
 </style>
-</head>
-<body>
-
-<header><h1>HEKIMA SYAGHUSWA</h1><nav><a href="#papeterie">HK Papeterie</a><a href="#apropos">À propos</a><a href="#contact">Contact</a></nav></header>
-
-<!-- 1. PHOTO FILIGRANE EN HAUT -->
-<div class="hero">
-  <img src="photo.jpg" alt="Hekima">
-  <h2>Salut, moi c'est Hekima Syaghuswa</h2>
-  <div class="slogan">« La Sagesse et l'Honnêteté avant tout »</div>
-  <p>Étudiant en Gestion Informatique à l'UAC Butembo et PDG de <b>HK Papeterie</b> à Butembo.</p>
-  <a class="btn" href="#papeterie">🛒 Voir ma Papeterie</a>
-  <a class="btn btn-outline" href="https://wa.me/243976053534">WhatsApp moi</a>
-</div>
-
-<!-- 2. BANDE BLEUE GALERIE - JUSTE EN DESSOUS DE LA PHOTO, JUSTE AU-DESSUS DE LA PAPETERIE -->
-<div class="bande-galerie">
-  <h2>Vous pouvez voir nos  produits ici<br>ou publier aussi vos produits dans ma galerie</h2>
-  <p>publie ton produit ici en y mettant votre adresse et le prix et tout le monde verra votre produit</p>
-  <a class="btn-galerie" href="gallery.html">📸 Voir la Galerie</a>
-  <a class="btn-envoyer" href="upload.html">➕ Envoyer une Photo</a>
-</div>
-
-<!-- 3. HK PAPETERIE -->
-<section id="papeterie"><div class="papeterie">
-  <div style="background:#FF7A00;display:inline-block;padding:6px 18px;border-radius:20px;font-weight:bold">📍 BUTEMBO - OUVERT 8H - 18H</div>
-  <h3 style="margin-top:15px">🛒 HK Papeterie - Tout pour l'École & le Bureau</h3>
-  <p>La papeterie de confiance . Prix abordables, qualité garantie, service rapide et honnête.</p>
-  <div class="papeterie-grid">
-    <div class="papeterie-card"><img src="patron.webp" alt="Patron HK Papeterie"><div><h4>🏪 Bienvenue chez HK Papeterie</h4><p>C'est moi-même qui vous accueille. Cahiers, sacs, papiers A4, stylos, tout pour réussir.</p><span class="prix">✅ Prix étudiants</span></div></div>
-    <div class="papeterie-card"><img src="machine.webp" alt="Impression HK Papeterie"><div><h4>🖨️ Impression & Photocopie</h4><p>Impression couleur, photocopie rapide, plastification, reliure, saisie de documents, CV, TFC, mémoires.</p><span class="prix">⚡ Service rapide</span></div></div>
-    <div class="papeterie-card"><img src="client.webp" alt="Service client HK Papeterie"><div><h4>🤝 Je sers mes clients avec sourire</h4><p>Chez HK Papeterie, chaque client est important. Venez, on vous prépare tout avec honnêteté.</p><span class="prix">🎒 Kits scolaires dispo</span></div></div>
-  </div>
-  <p style="margin-top:30px;font-size:19px"><b>vous servir c'est mon Devoir !</b></p>
-  <a class="btn-green" href="https://wa.me/243976053534?text=Bonjour%20HK%20Papeterie%2C%20je%20veux%20commander">📱 Commander sur WhatsApp</a>
-</div></section>
-<!-- GALERIE PUBLIQUE VISIBLE DIRECTEMENT -->
-<section id="galerie-publique" style="padding-top:0">
-  <h3>🛍️ Produits de la Communauté - Galerie Publique</h3>
-  <p style="text-align:center;margin-bottom:20px">Voici les produits publiés par tout le monde. Pas besoin de cliquer, ils sont déjà là !</p>
-  <div id="liste-produits" class="papeterie-grid"></div>
-  <div style="text-align:center;margin-top:20px">
-    <a href="upload.html" style="display:inline-block;background:#25D366;color:white;padding:14px 25px;border-radius:30px;text-decoration:none;font-weight:bold">➕ Publie aussi ton produit</a>
-    <a href="gallery.html" style="display:inline-block;background:#0b4f8a;color:white;padding:14px 25px;border-radius:30px;text-decoration:none;font-weight:bold;margin-left:10px">📸 Voir toute la Galerie</a>
-  </div>
-</section>
 
 <script>
 const BASE = "https://tphk-gallery-default-rtdb.firebaseio.com";
+// POUR VOIR LE BOUTON SUPPRIMER : ouvre ton site avec ?admin=hk123 à la fin
+// Ex: ton-site.com/index.html?admin=hk123
+const EST_ADMIN = new URLSearchParams(window.location.search).get('admin') === 'hk123';
+
 async function afficherProduits(){
   let zone=document.getElementById('liste-produits');
   if(!zone) return;
-  zone.innerHTML='<p style="text-align:center">Chargement des produits de tout le monde...</p>';
-  try{
-    let res=await fetch(BASE+"/produits.json");
-    let data=await res.json();
-    if(!data){zone.innerHTML='<p style="text-align:center;background:white;padding:25px;border-radius:15px">Aucun produit pour le moment. Sois le premier !</p>';return;}
-    let produits=Object.values(data).reverse();
-    zone.innerHTML=produits.map(p=>`
-      <div class="papeterie-card">
-        <img src="${p.img}">
-        <div><h4>${p.nom}</h4><p>${p.desc||''}</p><p>📍 ${p.adresse}<br>📱 ${p.tel}<br>📅 ${p.date||''}</p><span class="prix">${p.prix} FC</span><br><br>
-        <a href="https://wa.me/243${p.tel.replace(/[^0-9]/g,'').slice(-9)}" style="display:inline-block;background:#25D366;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold">Commander</a></div>
-      </div>`).join('');
-  }catch(e){zone.innerHTML='<p style="text-align:center">Pas de connexion. Réessaie.</p>';}
+  zone.innerHTML='<p style="text-align:center">Chargement...</p>';
+  let res=await fetch(BASE+"/produits.json");
+  let data=await res.json();
+  if(!data){zone.innerHTML='<p style="text-align:center">Aucun produit.</p>';return;}
+  let entrees=Object.entries(data).reverse();
+  zone.innerHTML=entrees.map(([id,p])=>`
+    <div class="papeterie-card">
+      <img src="${p.img}">
+      <div>
+        <span class="vendeur-badge">👤 ${p.vendeur || 'Vendeur HK'}</span>
+        <h4>${p.nom}</h4>
+        <p>${p.desc||''}</p>
+        <p>📍 ${p.adresse}<br>📱 ${p.tel}<br>📅 ${p.date||''}</p>
+        <span class="prix">${p.prix} FC</span><br><br>
+        <a href="https://wa.me/243${p.tel.replace(/[^0-9]/g,'').slice(-9)}" style="display:inline-block;background:#25D366;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold">Commander</a>
+        ${EST_ADMIN ? `<button class="btn-supprimer" onclick="supprimerProduit('${id}')">🗑 Supprimer</button>` : ''}
+      </div>
+    </div>`).join('');
+}
+async function supprimerProduit(id){
+  if(!confirm("Supprimer ce produit ?")) return;
+  await fetch(BASE+"/produits/"+id+".json",{method:"DELETE"});
+  alert("Supprimé !");
+  afficherProduits();
 }
 afficherProduits();
 </script>
-
-<section id="apropos"><h3>Qui suis-je ?</h3><div class="about-box"><p>Je m'appelle <b>Hekima Syaghuswa</b>, je vis à <b>Butembo, Nord-Kivu (RDC)</b>. Étudiant à l'<b>UAC Butembo</b> en <b>Gestion Informatique</b> et fondateur de <b>HK Papeterie</b>. Je suis <b>catholique</b> et ma mission est de prôner la <b>sagesse</b> et l'<b>honnêteté</b>.</p></div></section>
-
-<section id="contact"><h3>Contacte-moi / HK Papeterie</h3><div class="contact-box"><p>📍 Butembo, Nord-Kivu - RDC</p><a class="wa" href="https://wa.me/243976053534">📱 WhatsApp : +243 976 053 534</a><br><a class="mail" href="mailto:hkkakule@gmail.com">📧 Gmail : hkkakule@gmail.com</a><br><a class="fb" href="https://www.facebook.com/search/top?q=Hekima%20Syaghuswa">📘 Facebook : Hekima Syaghuswa</a></div></section>
-
-<footer><p>© 2026 Hekima Syaghuswa - HK Papeterie - Fait avec ❤️ à Butembo</p></footer>
-</body>
-</html>
