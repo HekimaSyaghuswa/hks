@@ -37,6 +37,10 @@
   .papeterie-card div{padding:18px}
   .papeterie-card h4{color:#0b4f8a;margin-bottom:8px}
   .prix{background:#FFF3E0;color:#E65100;display:inline-block;padding:5px 12px;border-radius:20px;font-weight:bold;font-size:14px;margin-top:10px}
+  /* AJOUT 1 : badge vendeur + bouton supprimer + photo entiere pour la galerie seulement */
+  .vendeur-badge{background:#0b4f8a;color:white;padding:5px 12px;border-radius:20px;font-size:13px;font-weight:bold;display:inline-block;margin-bottom:8px}
+  .btn-supprimer{background:#ff3b30;color:white;border:0;padding:10px 15px;border-radius:20px;font-weight:bold;cursor:pointer;margin-left:8px}
+  #liste-produits .papeterie-card img{height:auto;max-height:380px;object-fit:contain;background:#fff}
   .about-box{background:white;padding:30px;border-radius:15px;box-shadow:0 4px 15px rgba(0,0,0,.08)}
   .contact-box{background:white;padding:30px;border-radius:15px;text-align:center}
   .contact-box a{display:inline-block;margin:8px;padding:12px 20px;border-radius:30px;text-decoration:none;font-weight:bold}
@@ -95,6 +99,7 @@
 
 <script>
 const BASE = "https://tphk-gallery-default-rtdb.firebaseio.com";
+const EST_ADMIN = new URLSearchParams(window.location.search).get('admin') === 'hk123';
 async function afficherProduits(){
   let zone=document.getElementById('liste-produits');
   if(!zone) return;
@@ -103,14 +108,24 @@ async function afficherProduits(){
     let res=await fetch(BASE+"/produits.json");
     let data=await res.json();
     if(!data){zone.innerHTML='<p style="text-align:center;background:white;padding:25px;border-radius:15px">Aucun produit pour le moment. Sois le premier !</p>';return;}
-    let produits=Object.values(data).reverse();
-    zone.innerHTML=produits.map(p=>`
+    let entrees=Object.entries(data).reverse();
+    zone.innerHTML=entrees.map(([id,p])=>`
       <div class="papeterie-card">
         <img src="${p.img}">
-        <div><h4>${p.nom}</h4><p>${p.desc||''}</p><p>📍 ${p.adresse}<br>📱 ${p.tel}<br>📅 ${p.date||''}</p><span class="prix">${p.prix} FC</span><br><br>
-        <a href="https://wa.me/243${p.tel.replace(/[^0-9]/g,'').slice(-9)}" style="display:inline-block;background:#25D366;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold">Commander</a></div>
+        <div>
+          <span class="vendeur-badge">👤 ${p.vendeur || 'Vendeur HK'}</span>
+          <h4>${p.nom}</h4><p>${p.desc||''}</p><p>📍 ${p.adresse}<br>📱 ${p.tel}<br>📅 ${p.date||''}</p><span class="prix">${p.prix} FC</span><br><br>
+          <a href="https://wa.me/243${String(p.tel).replace(/[^0-9]/g,'').slice(-9)}" style="display:inline-block;background:#25D366;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold">Commander</a>
+          ${EST_ADMIN ? `<button class="btn-supprimer" onclick="supprimerProduit('${id}')">🗑 Supprimer</button>` : ''}
+        </div>
       </div>`).join('');
   }catch(e){zone.innerHTML='<p style="text-align:center">Pas de connexion. Réessaie.</p>';}
+}
+async function supprimerProduit(id){
+  if(!confirm("Supprimer ce produit ?")) return;
+  await fetch(BASE+"/produits/"+id+".json",{method:"DELETE"});
+  alert("Produit supprimé !");
+  afficherProduits();
 }
 afficherProduits();
 </script>
