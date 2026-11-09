@@ -6,11 +6,21 @@
 <title>HEKIMA SYAGHUSWA - HK Papeterie</title>
 <style>
 *{box-sizing:border-box;font-family:Arial}body{margin:0;background:#f4f6fb}
-header{background:#0b4f8a;color:white;padding:18px 15px;display:flex;justify-content:space-between;align-items:center}
+header{background:#0b4f8a;color:white;padding:18px 15px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
 header b{font-size:20px}
-.top{padding:15px;text-align:right}
+header a{color:white;text-decoration:none;font-weight:bold;background:#ffffff33;padding:8px 14px;border-radius:20px}
+/* --- TA PAGE D'ACCUEIL DE L'APRÈS-MIDI --- */
+.hero{background:linear-gradient(135deg,#0b4f8a,#00a8e8);color:white;text-align:center;padding:35px 20px 30px}
+.hero h1{margin:0;font-size:32px}
+.hero p{font-size:16px;opacity:.95;max-width:600px;margin:12px auto}
+.hero-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.hero-btns a{padding:13px 22px;border-radius:25px;font-weight:bold;text-decoration:none;font-size:15px}
+.btn-pub{background:#25D366;color:white}
+.btn-gal{background:white;color:#0b4f8a}
+.top{padding:15px;text-align:right;max-width:900px;margin:auto}
 .compte{background:#0b4f8a;color:white;border:0;padding:12px 20px;border-radius:20px;font-weight:bold}
-input[type=text]{padding:8px;border:1px solid #ccc;border-radius:6px;margin:10px}
+input[type=text]{padding:11px;border:1px solid #ccc;border-radius:10px;margin:10px;width:calc(100% - 20px);max-width:880px;display:block;margin-left:auto;margin-right:auto}
+h2.sec{text-align:center;color:#0b4f8a;margin:10px 0}
 .grid{padding:10px;max-width:900px;margin:auto}
 .card{background:white;padding:15px;border-radius:12px;margin-bottom:15px}
 .card img{width:100%;max-height:300px;object-fit:cover;border-radius:10px;background:#eee;display:block}
@@ -25,14 +35,33 @@ input[type=text]{padding:8px;border:1px solid #ccc;border-radius:6px;margin:10px
 .prixBtn{background:#ff9f00;color:white}
 .descBtn{background:#fff;border:1px solid #999}
 .del{background:#ff3b30;color:white}
+footer{background:#0b4f8a;color:white;text-align:center;padding:20px;margin-top:20px}
+footer a{color:white;font-weight:bold}
 </style>
 </head>
 <body>
-<header><b>HEKIMA SYAGHUSWA</b><span>HK Papeterie</span></header>
+
+<header><b>HEKIMA SYAGHUSWA</b><span>HK Papeterie</span><a href="upload.html">➕ Publier</a></header>
+
+<!-- C'EST ÇA TA PAGE D'ACCUEIL QUI MANQUAIT -->
+<div class="hero">
+  <h1>Bienvenue chez HK Papeterie 📚</h1>
+  <p>HEKIMA SYAGHUSWA - Tout pour l'école, le bureau et la maison à Goma. Publie, découvre, commande en 1 clic sur WhatsApp.</p>
+  <div class="hero-btns">
+    <a class="btn-pub" href="upload.html">➕ Publier un produit</a>
+    <a class="btn-gal" href="gallery.html">🖼️ Voir toute la galerie</a>
+  </div>
+</div>
+
 <div class="top"><button class="compte">📦 <span id="nb">0</span> produit(s) publié(s)</button></div>
 <input type="text" id="recherche" placeholder="🔍 Rechercher un produit" oninput="filtrer()">
+<h2 class="sec">🛍️ Nos produits</h2>
 <div class="grid" id="galerie"></div>
-<p style="text-align:center"><a href="gallery.html">Voir toute la galerie</a> | <a href="upload.html">➕ Publier</a></p>
+
+<footer>
+  <p>HEKIMA SYAGHUSWA - HK Papeterie - Goma</p>
+  <p><a href="gallery.html">Galerie</a> | <a href="upload.html">Publier</a></p>
+</footer>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -68,7 +97,6 @@ function afficher(liste){
   div.innerHTML = '';
   liste.forEach(([id, p]) => {
     const titre = p.titre || p.produit || p.nomProduit || p.nom || "";
-    // CORRIGÉ : on prend d'abord ce que tu as mis dans la fiche vendeur, jamais HK si tu as rempli
     const vendeur = p.vendeur || p.nomVendeur || p.auteur || (p.titre && p.nom && p.nom !== p.titre ? p.nom : "HK");
     let photo = p.photo || p.image || p.imageUrl || p.img || p.photoURL || p.url || "";
     if(!photo){
