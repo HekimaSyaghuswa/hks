@@ -8,8 +8,6 @@
 *{box-sizing:border-box;font-family:Arial}body{margin:0;background:#f4f6fb}
 header{background:#0b4f8a;color:white;padding:18px 15px;display:flex;justify-content:space-between;align-items:center}
 header b{font-size:20px}
-.btn-modifier{background:#FF9800;color:white;border:0;padding:10px 15px;border-radius:20px;font-weight:bold;cursor:pointer;margin-left:5px;margin-top:10px}
-.compteur{text-align:center;background:#0b4f8a;color:white;padding:10px 20px;border-radius:20px;max-width:300px;margin:0 auto 20px;font-weight:bold}
 .top{padding:15px;text-align:right}
 .compte{background:#0b4f8a;color:white;border:0;padding:12px 20px;border-radius:20px;font-weight:bold}
 input[type=text]{padding:8px;border:1px solid #ccc;border-radius:6px;margin:10px}
@@ -27,102 +25,112 @@ input[type=text]{padding:8px;border:1px solid #ccc;border-radius:6px;margin:10px
 .prixBtn{background:#ff9f00;color:white}
 .descBtn{background:#fff;border:1px solid #999}
 .del{background:#ff3b30;color:white}
-.btn-desc{background:#9C27B0;color:white;border:0;padding:10px 15px;border-radius:20px;font-weight:bold;cursor:pointer;margin-left:5px;margin-top:10px}
-.recherche{max-width:500px;margin:0 auto 20px}
-.recherche input{width:100%;padding:13px;border:1px solid #ddd;border-radius:20px;font-size:16px;outline:none}
 </style>
 </head>
 <body>
 <header><b>HEKIMA SYAGHUSWA</b><span>HK Papeterie</span></header>
 <div class="top"><button class="compte">📦 <span id="nb">0</span> produit(s) publié(s)</button></div>
 <input type="text" id="recherche" placeholder="🔍 Rechercher un produit" oninput="filtrer()">
-<div class="compteur" id="compteur-index">Chargement...</div>
-<div class="recherche">
-  <input id="search-index" placeholder="🔍 Rechercher un produit, un vendeur, une ville..." oninput="filtrerIndex()">
-</div>
-
-<div id="liste-produits"></div>
 <div class="grid" id="galerie"></div>
 <p style="text-align:center"><a href="gallery.html">Voir toute la galerie</a> | <a href="upload.html">➕ Publier</a></p>
 
-<script>
-const BASE = "https://tphk-gallery-default-rtdb.firebaseio.com";
-const MOT_DE_PASSE = "hk123";
-let tousProduitsIndex = [];
-
-async function afficherProduits(){
-  let zone=document.getElementById('liste-produits');
-  if(!zone) return;
-  zone.innerHTML='<p style="text-align:center">Chargement...</p>';
-  try{
-    let res=await fetch(BASE+"/produits.json");
-    let data=await res.json();
-    tousProduitsIndex = data ? Object.entries(data).reverse() : [];
-    let cpt = document.getElementById('compteur-index');
-    if(cpt) cpt.innerText = "📦 " + tousProduitsIndex.length + " produit(s) publié(s)";
-    afficherIndex(tousProduitsIndex);
-  }catch(e){zone.innerHTML='<p style="text-align:center">Pas de connexion. Réessaie.</p>';}
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+const CODE_ADMIN = "HK1234";
+function demanderCode(){
+  const code = prompt("🔐 Code admin ?");
+  if(code !== CODE_ADMIN){ alert("Code faux ! Bloqué."); return false; }
+  return true;
 }
+const firebaseConfig = {
+  apiKey: "AIzaSyAjAXZJDJyHCN5ed5fJQY1DzRA_Kq3h5Rs",
+  authDomain: "tphk-gallery.firebaseapp.com",
+  databaseURL: "https://tphk-gallery-default-rtdb.firebaseio.com",
+  projectId: "tphk-gallery",
+  storageBucket: "tphk-gallery.firebasestorage.app",
+  messagingSenderId: "212082158055",
+  appId: "1:212082158055:web:fccaadb4785f511071b542"
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+let tous = [];
 
-function afficherIndex(entrees){
-  let zone=document.getElementById('liste-produits');
-  if(entrees.length==0){zone.innerHTML='<p style="text-align:center;background:white;padding:25px;border-radius:15px">Aucun produit trouvé.</p>';return;}
-  zone.innerHTML=entrees.map(([id,p])=>`
-    <div class="papeterie-card">
-      <img src="${p.img}">
-      <div>
-        <span class="vendeur-badge">👤 ${p.vendeur || 'Vendeur HK'}</span>
-        <h4>${p.nom}</h4><p>${p.desc||''}</p><p>📍 ${p.adresse}<br>📱 ${p.tel}<br>📅 ${p.date||''}</p><span class="prix">${p.prix}</span><br><br>
-        <a href="https://wa.me/243${String(p.tel).replace(/[^0-9]/g,'').slice(-9)}" style="display:inline-block;background:#25D366;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold">Commander</a>
-        <button class="btn-modifier" onclick="modifierPrix('${id}','${p.prix}')">✏️ Prix</button>
-        <button class="btn-desc" onclick="modifierDesc('${id}')">✏️ Desc</button>
-        <button class="btn-supprimer" onclick="supprimerProduit('${id}')">🗑 Supprimer</button>
+onValue(ref(db, 'produits'), (snap) => {
+  const data = snap.val() || {};
+  document.getElementById('nb').textContent = Object.keys(data).length;
+  tous = Object.entries(data).reverse();
+  afficher(tous);
+});
+
+function afficher(liste){
+  const div = document.getElementById('galerie');
+  div.innerHTML = '';
+  liste.forEach(([id, p]) => {
+    const titre = p.titre || p.produit || p.nomProduit || p.nom || "";
+    // CORRIGÉ : on prend d'abord ce que tu as mis dans la fiche vendeur, jamais HK si tu as rempli
+    const vendeur = p.vendeur || p.nomVendeur || p.auteur || (p.titre && p.nom && p.nom !== p.titre ? p.nom : "HK");
+    let photo = p.photo || p.image || p.imageUrl || p.img || p.photoURL || p.url || "";
+    if(!photo){
+      for(let v of Object.values(p)){
+        if(typeof v === 'string' && (v.startsWith('data:image') || v.startsWith('http'))){ photo = v; break; }
+      }
+    }
+    const prix = p.prix || "";
+    const desc = p.desc || p.description || "";
+    const lieu = p.lieu || p.ville || "";
+    const tel = p.telephone || p.tel || p.phone || "";
+    let dateStr = "";
+    if(p.date){ const d = new Date(Number(p.date)); if(!isNaN(d)) dateStr = d.toLocaleDateString(); }
+    const telClean = String(tel).replace(/\s/g,'');
+    const waLink = telClean ? `https://wa.me/${telClean.startsWith('243') ? telClean : '243' + telClean.replace(/^0/,'')}?text=${encodeURIComponent('Bonjour, je veux commander : ' + titre)}` : '#';
+    div.innerHTML += `<div class="card">
+      <img src="${photo}">
+      <button class="badge" onclick="changerVendeur('${id}','${titre}','${vendeur}')">👤 Vendeur ${vendeur} ✏️</button>
+      <div class="titre">${titre}</div>
+      <div class="desc">${desc}</div>
+      ${lieu ? `<div class="info">📍 ${lieu}</div>` : ``}
+      ${tel ? `<div class="info">📱 ${tel}</div>` : ``}
+      ${dateStr ? `<div class="info">📅 ${dateStr}</div>` : ``}
+      ${prix ? `<div class="prix">${prix}</div>` : ``}
+      <div class="btns">
+        <a class="cmd" href="${waLink}" target="_blank">Commander</a>
+        <button class="prixBtn" onclick="changerPrix('${id}','${prix}')">✏️ Prix</button>
+        <button class="descBtn" onclick="changerDesc('${id}')">✏️ Desc</button>
+        <button class="del" onclick="supprimer('${id}')">🗑 Supprimer</button>
       </div>
-    </div>`).join('');
-}
-
-function filtrerIndex(){
-  let mot = document.getElementById('search-index').value.toLowerCase().trim();
-  if(!mot){ afficherIndex(tousProduitsIndex); return; }
-  let filtres = tousProduitsIndex.filter(([id,p])=>{
-    return (p.nom||'').toLowerCase().includes(mot) ||
-           (p.vendeur||'').toLowerCase().includes(mot) ||
-           (p.desc||'').toLowerCase().includes(mot) ||
-           (p.adresse||'').toLowerCase().includes(mot);
+    </div>`;
   });
-  afficherIndex(filtres);
 }
-
-async function supprimerProduit(id){
-  let mdp = prompt("🔒 Mot de passe Admin pour supprimer :");
-  if(mdp === null) return;
-  if(mdp !== MOT_DE_PASSE){ alert("Mot de passe incorrect !"); return; }
+window.filtrer = function(){
+  const q = document.getElementById('recherche').value.toLowerCase();
+  afficher(tous.filter(([id,p]) => ((p.titre||p.nom||"")+" "+(p.desc||"")).toLowerCase().includes(q)));
+}
+window.changerVendeur = async function(id, titreActuel, vendeurActuel){
+  if(!demanderCode()) return;
+  const nouveau = prompt("Vrai vendeur pour " + titreActuel + " ?", vendeurActuel === "HK" ? "" : vendeurActuel);
+  if(!nouveau) return;
+  const lieu = prompt("Lieu pour " + titreActuel + " ?");
+  const tel = prompt("Téléphone du vendeur ?");
+  await update(ref(db, 'produits/'+id), { titre: titreActuel, vendeur: nouveau.trim(), lieu: lieu || "", telephone: tel || "" });
+}
+window.changerPrix = async function(id, ancien){
+  if(!demanderCode()) return;
+  const nouveau = prompt("Nouveau prix ?", ancien);
+  if(nouveau === null) return;
+  await update(ref(db, 'produits/'+id), { prix: nouveau });
+}
+window.changerDesc = async function(id){
+  if(!demanderCode()) return;
+  const nouveau = prompt("Nouvelle description ?");
+  if(nouveau === null) return;
+  await update(ref(db, 'produits/'+id), { desc: nouveau });
+}
+window.supprimer = async function(id){
+  if(!demanderCode()) return;
   if(!confirm("Supprimer ce produit ?")) return;
-  await fetch(BASE+"/produits/"+id+".json",{method:"DELETE"});
-  alert("Produit supprimé !");
-  afficherProduits();
+  await remove(ref(db, 'produits/'+id));
 }
-async function modifierPrix(id, ancienPrix){
-  let mdp = prompt("🔒 Mot de passe Admin pour modifier le prix :");
-  if(mdp === null) return;
-  if(mdp !== MOT_DE_PASSE){ alert("Mot de passe incorrect !"); return; }
-  let nouveauPrix = prompt("Nouveau prix (ex: 20000 FC ou 12 $) :", ancienPrix);
-  if(nouveauPrix === null || nouveauPrix.trim() === "") return;
-  await fetch(BASE+"/produits/"+id+".json",{method:"PATCH", body: JSON.stringify({prix: nouveauPrix.trim()})});
-  alert("Prix modifié !");
-  afficherProduits();
-}
-async function modifierDesc(id){
-  let mdp = prompt("🔒 Mot de passe Admin pour modifier la description :");
-  if(mdp === null) return;
-  if(mdp !== MOT_DE_PASSE){ alert("Mot de passe incorrect !"); return; }
-  let nouvelleDesc = prompt("Nouvelle description :");
-  if(nouvelleDesc === null) return;
-  await fetch(BASE+"/produits/"+id+".json",{method:"PATCH", body: JSON.stringify({desc: nouvelleDesc.trim()})});
-  alert("Description modifiée !");
-  afficherProduits();
-}
-afficherProduits();
 </script>
 </body>
 </html>
