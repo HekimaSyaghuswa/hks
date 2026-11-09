@@ -99,7 +99,8 @@
 
 <script>
 const BASE = "https://tphk-gallery-default-rtdb.firebaseio.com";
-const EST_ADMIN = new URLSearchParams(window.location.search).get('admin') === 'hk123';
+const MOT_DE_PASSE = "hk123";
+
 async function afficherProduits(){
   let zone=document.getElementById('liste-produits');
   if(!zone) return;
@@ -114,14 +115,17 @@ async function afficherProduits(){
         <img src="${p.img}">
         <div>
           <span class="vendeur-badge">👤 ${p.vendeur || 'Vendeur HK'}</span>
-          <h4>${p.nom}</h4><p>${p.desc||''}</p><p>📍 ${p.adresse}<br>📱 ${p.tel}<br>📅 ${p.date||''}</p><span class="prix">${p.prix} </span><br><br>
+          <h4>${p.nom}</h4><p>${p.desc||''}</p><p>📍 ${p.adresse}<br>📱 ${p.tel}<br>📅 ${p.date||''}</p><span class="prix">${p.prix} FC</span><br><br>
           <a href="https://wa.me/243${String(p.tel).replace(/[^0-9]/g,'').slice(-9)}" style="display:inline-block;background:#25D366;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold">Commander</a>
-          ${EST_ADMIN ? `<button class="btn-supprimer" onclick="supprimerProduit('${id}')">🗑 Supprimer</button>` : ''}
+          <button class="btn-supprimer" onclick="supprimerProduit('${id}')">🗑 Supprimer</button>
         </div>
       </div>`).join('');
   }catch(e){zone.innerHTML='<p style="text-align:center">Pas de connexion. Réessaie.</p>';}
 }
 async function supprimerProduit(id){
+  let mdp = prompt("🔒 Mot de passe Admin pour supprimer :");
+  if(mdp === null) return;
+  if(mdp !== MOT_DE_PASSE){ alert("Mot de passe incorrect ! Seul Hekima peut supprimer."); return; }
   if(!confirm("Supprimer ce produit ?")) return;
   await fetch(BASE+"/produits/"+id+".json",{method:"DELETE"});
   alert("Produit supprimé !");

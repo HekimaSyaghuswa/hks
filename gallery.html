@@ -12,17 +12,14 @@ h2{text-align:center;color:#0b4f8a}
 .top a{color:#0b4f8a;font-weight:bold;text-decoration:none;margin:0 10px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;max-width:1000px;margin:auto}
 .card{background:white;border-radius:15px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.08)}
-
-/* PHOTO ENTIÈRE - NE COUPE PLUS */
 .card img{width:100%;height:auto;max-height:380px;object-fit:contain;background:#fff;display:block}
-
 .card div{padding:15px}
 .card h3{margin:5px 0;color:#0b4f8a}
 .card p{color:#333;line-height:1.5}
 .prix{background:#FFF3E0;color:#E65100;padding:5px 12px;border-radius:20px;font-weight:bold;display:inline-block}
 .vendeur-badge{background:#0b4f8a;color:white;padding:5px 12px;border-radius:20px;font-size:13px;font-weight:bold;display:inline-block;margin-bottom:8px}
 .btn-commander{display:inline-block;background:#25D366;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;margin-top:10px}
-.btn-supprimer{background:#ff3b30;color:white;border:0;padding:8px 15px;border-radius:20px;font-weight:bold;cursor:pointer;margin-left:10px;margin-top:10px}
+.btn-supprimer{background:#ff3b30;color:white;border:0;padding:10px 15px;border-radius:20px;font-weight:bold;cursor:pointer;margin-left:10px;margin-top:10px}
 </style>
 </head>
 <body>
@@ -34,10 +31,8 @@ h2{text-align:center;color:#0b4f8a}
 
 <script>
 const BASE = "https://tphk-gallery-default-rtdb.firebaseio.com";
-
-// POUR VOIR LE BOUTON SUPPRIMER, ouvre la galerie comme ça :
-// ton-site.com/gallery.html?admin=hk123
-const EST_ADMIN = new URLSearchParams(window.location.search).get('admin') === 'hk123';
+// CHANGE TON MOT DE PASSE ICI, SEUL TOI TU LE CONNAIS
+const MOT_DE_PASSE = "hk123";
 
 function charger(){
   fetch(BASE+"/produits.json")
@@ -58,7 +53,7 @@ function charger(){
           <p>📍 ${x.adresse}<br>📱 ${x.tel}<br>📅 ${x.date || ''}</p>
           <span class="prix">${x.prix} FC</span><br>
           <a class="btn-commander" href="https://wa.me/243${String(x.tel || '').replace(/[^0-9]/g,'').slice(-9)}">Commander</a>
-          ${EST_ADMIN ? `<button class="btn-supprimer" onclick="supprimerProduit('${id}')">🗑 Supprimer</button>` : ''}
+          <button class="btn-supprimer" onclick="supprimerProduit('${id}')">🗑 Supprimer</button>
         </div>
       </div>
     `).join('');
@@ -69,6 +64,9 @@ function charger(){
 }
 
 async function supprimerProduit(id){
+  let mdp = prompt("🔒 Mot de passe Admin pour supprimer :");
+  if(mdp === null) return;
+  if(mdp !== MOT_DE_PASSE){ alert("Mot de passe incorrect ! Seul Hekima peut supprimer."); return; }
   if(!confirm("Supprimer ce produit ?")) return;
   await fetch(BASE+"/produits/"+id+".json",{method:"DELETE"});
   alert("Supprimé !");
