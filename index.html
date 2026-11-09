@@ -121,7 +121,7 @@ async function afficherProduits(){
         <img src="${p.img}">
         <div>
           <span class="vendeur-badge">👤 ${p.vendeur || 'Vendeur HK'}</span>
-          <h4>${p.nom}</h4><p>${p.desc||''}</p><p>📍 ${p.adresse}<br>📱 ${p.tel}<br>📅 ${p.date||''}</p><span class="prix">${p.prix} FC</span><br><br>
+          <h4>${p.nom}</h4><p>${p.desc||''}</p><p>📍 ${p.adresse}<br>📱 ${p.tel}<br>📅 ${p.date||''}</p><span class="prix">${p.prix} </span><br><br>
           <a href="https://wa.me/243${String(p.tel).replace(/[^0-9]/g,'').slice(-9)}" style="display:inline-block;background:#25D366;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold">Commander</a>
           <button class="btn-modifier" onclick="modifierPrix('${id}','${p.prix}')">✏️ Prix</button>
           <button class="btn-supprimer" onclick="supprimerProduit('${id}')">🗑 Supprimer</button>
