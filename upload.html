@@ -32,7 +32,7 @@
 <script>
 // ===== TON CLOUDINARY - DÉJÀ REMPLI =====
 const CLOUD_NAME = "sogn1cr8";
-const UPLOAD_PRESET = "hekima_preset";
+const UPLOAD_PRESET = "hekima_presset";
 
 // Aperçu photo
 document.getElementById('photo').addEventListener('change', e => {
@@ -62,7 +62,7 @@ async function publier(){
     // 1. ENVOI VERS TON CLOUDINARY sogn1cr8
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('upload_preset', UPLOAD_PRESET);
+    formData.append('upload_presset', UPLOAD_PRESET);
     formData.append('folder', 'hekima');
 
     const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
