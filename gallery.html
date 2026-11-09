@@ -27,7 +27,6 @@ a{display:block;text-align:center;margin-top:20px;color:#0b4f8a;font-weight:bold
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
 const firebaseConfig = {
   apiKey: "AIzaSyAjAXZJDJyHCN5ed5fJQY1DzRA_Kq3h5Rs",
   authDomain: "tphk-gallery.firebaseapp.com",
@@ -47,37 +46,27 @@ onValue(ref(db, 'produits'), (snap) => {
   if(!data){ document.getElementById('vide').textContent = "Aucune photo pour l'instant"; return; }
   document.getElementById('vide').style.display = 'none';
   Object.values(data).reverse().forEach(p => {
-    const titre = p.titre || p.title || p.produit || p.nomProduit || p.name || p.nom || "Sans titre";
+    // EST-CE UN NOUVEAU OU UN ANCIEN ?
+    const isNouveau = !!(p.titre || p.title || p.produit);
+    // Si nouveau : titre = p.titre, vendeur = p.nom (KAKULE)
+    // Si ancien : titre = p.nom (AirPods), vendeur = HK (on ne connait pas le vrai vendeur)
+    const titre = isNouveau ? (p.titre || p.title || p.produit) : (p.nom || "Sans titre");
+    const vendeur = isNouveau ? (p.nom || "Inconnu") : "HK";
     let photo = p.photo || p.image || p.imageUrl || p.img || p.photoURL || p.url || "";
     if(!photo){
       for(let v of Object.values(p)){
         if(typeof v === 'string' && v.startsWith('http') && (v.includes('cloudinary') || v.includes('.jpg') || v.includes('.png') || v.includes('firebasestorage'))){ photo = v; break; }
       }
     }
-    const nom = p.nom || p.auteur || p.vendeur || "HK";
     const prix = p.prix || p.price || "";
     const desc = p.desc || p.description || "";
     const lieu = p.lieu || p.ville || "";
     const tel = p.telephone || p.tel || p.phone || "";
     const dateStr = p.date ? new Date(p.date).toLocaleDateString() : "";
-
-    // ICI : si lieu ou tel n'existent pas, on n'affiche RIEN, donc plus de undefined
     const lieuHTML = lieu ? `<div class="info">📍 ${lieu}</div>` : ``;
     const telHTML = tel ? `<div class="info">📱 ${tel}</div>` : ``;
     const dateHTML = dateStr ? `<div class="info">📅 ${dateStr}</div>` : ``;
-
-    div.innerHTML += `
-    <div class="card">
-      <img src="${photo}">
-      <span class="badge">👤 Vendeur HK</span>
-      <div class="titre">${titre}</div>
-      <div class="info">Vendeur : <b>${nom}</b></div>
-      <div class="desc">${desc}</div>
-      ${lieuHTML}
-      ${telHTML}
-      ${dateHTML}
-      ${prix ? `<div class="prix">${prix}</div>` : ``}
-    </div>`;
+    div.innerHTML += `<div class="card"><img src="${photo}"><span class="badge">👤 Vendeur HK</span><div class="titre">${titre}</div><div class="info">Vendeur : <b>${vendeur}</b></div><div class="desc">${desc}</div>${lieuHTML}${telHTML}${dateHTML}${prix ? `<div class="prix">${prix}</div>` : ``}</div>`;
   });
 });
 </script>
