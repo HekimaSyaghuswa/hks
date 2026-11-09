@@ -49,6 +49,8 @@
   .fb{background:#1877F2;color:white}
   footer{background:#0b2a44;color:white;text-align:center;padding:25px}
   @media(max-width:600px){header nav{display:none} .hero h2{font-size:28px} .bande-galerie h2{font-size:20px} .bande-galerie p{font-size:15px}}
+  .btn-modifier{background:#FF9800;color:white;border:0;padding:10px 15px;border-radius:20px;font-weight:bold;cursor:pointer;margin-left:5px;margin-top:10px}
+.compteur{text-align:center;background:#0b4f8a;color:white;padding:10px 20px;border-radius:20px;max-width:300px;margin:0 auto 20px;font-weight:bold}
 </style>
 </head>
 <body>
@@ -87,6 +89,8 @@
   <a class="btn-green" href="https://wa.me/243976053534?text=Bonjour%20HK%20Papeterie%2C%20je%20veux%20commander">📱 Commander sur WhatsApp</a>
 </div></section>
 <!-- GALERIE PUBLIQUE VISIBLE DIRECTEMENT -->
+ <div class="compteur" id="compteur-index">Chargement...</div>
+<div id="liste-produits"></div>
 <section id="galerie-publique" style="padding-top:0">
   <h3>🛍️ Produits de la Communauté - Galerie Publique</h3>
   <p style="text-align:center;margin-bottom:20px">Voici les produits publiés par tout le monde. Pas besoin de cliquer, ils sont déjà là !</p>
@@ -108,8 +112,10 @@ async function afficherProduits(){
   try{
     let res=await fetch(BASE+"/produits.json");
     let data=await res.json();
+    let entrees = data ? Object.entries(data).reverse() : [];
+    let cpt = document.getElementById('compteur-index');
+    if(cpt) cpt.innerText = "📦 " + entrees.length + " produit(s) publié(s)";
     if(!data){zone.innerHTML='<p style="text-align:center;background:white;padding:25px;border-radius:15px">Aucun produit pour le moment. Sois le premier !</p>';return;}
-    let entrees=Object.entries(data).reverse();
     zone.innerHTML=entrees.map(([id,p])=>`
       <div class="papeterie-card">
         <img src="${p.img}">
@@ -117,6 +123,7 @@ async function afficherProduits(){
           <span class="vendeur-badge">👤 ${p.vendeur || 'Vendeur HK'}</span>
           <h4>${p.nom}</h4><p>${p.desc||''}</p><p>📍 ${p.adresse}<br>📱 ${p.tel}<br>📅 ${p.date||''}</p><span class="prix">${p.prix} FC</span><br><br>
           <a href="https://wa.me/243${String(p.tel).replace(/[^0-9]/g,'').slice(-9)}" style="display:inline-block;background:#25D366;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold">Commander</a>
+          <button class="btn-modifier" onclick="modifierPrix('${id}','${p.prix}')">✏️ Prix</button>
           <button class="btn-supprimer" onclick="supprimerProduit('${id}')">🗑 Supprimer</button>
         </div>
       </div>`).join('');
@@ -125,10 +132,20 @@ async function afficherProduits(){
 async function supprimerProduit(id){
   let mdp = prompt("🔒 Mot de passe Admin pour supprimer :");
   if(mdp === null) return;
-  if(mdp !== MOT_DE_PASSE){ alert("Mot de passe incorrect ! Seul Hekima peut supprimer."); return; }
+  if(mdp !== MOT_DE_PASSE){ alert("Mot de passe incorrect !"); return; }
   if(!confirm("Supprimer ce produit ?")) return;
   await fetch(BASE+"/produits/"+id+".json",{method:"DELETE"});
   alert("Produit supprimé !");
+  afficherProduits();
+}
+async function modifierPrix(id, ancienPrix){
+  let mdp = prompt("🔒 Mot de passe Admin pour modifier le prix :");
+  if(mdp === null) return;
+  if(mdp !== MOT_DE_PASSE){ alert("Mot de passe incorrect !"); return; }
+  let nouveauPrix = prompt("Nouveau prix (ex: 20000 FC) :", ancienPrix);
+  if(nouveauPrix === null || nouveauPrix.trim() === "") return;
+  await fetch(BASE+"/produits/"+id+".json",{method:"PATCH", body: JSON.stringify({prix: nouveauPrix.trim()})});
+  alert("Prix modifié !");
   afficherProduits();
 }
 afficherProduits();
