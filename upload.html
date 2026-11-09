@@ -9,11 +9,12 @@
 <body>
 <div class="box">
 <h2>➕ Publie ton produit</h2>
-<p style="text-align:center">Tout le monde dans le monde verra ton produit !</p>
-<input id="nom" placeholder="Ton nom ex: Hekima">
-<input id="titre" placeholder="Nom du produit">
-<input id="prix" placeholder="Prix ex: 5000 FC">
-<textarea id="desc" placeholder="Description"></textarea>
+<input id="nom" placeholder="Ton nom ex: KAKULE">
+<input id="titre" placeholder="Nom du produit ex: tableau">
+<input id="prix" placeholder="Prix ex: 10$">
+<textarea id="desc" placeholder="Description ex: Solide et lisse"></textarea>
+<input id="lieu" placeholder="Lieu ex: Goma, Butembo">
+<input id="tel" placeholder="Téléphone ex: +243...">
 <label style="font-weight:bold">📸 Choisis ta photo :</label>
 <input type="file" id="photo" accept="image/*">
 <img id="apercu">
@@ -26,7 +27,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-// TON FIREBASE - tphk-gallery
 const firebaseConfig = {
   apiKey: "AIzaSyAjAXZJDJyHCN5ed5fJQY1DzRA_Kq3h5Rs",
   authDomain: "tphk-gallery.firebaseapp.com",
@@ -39,7 +39,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// TON CLOUDINARY
 const CLOUD_NAME = "sogn1cr8";
 const UPLOAD_PRESET = "hekima_presset";
 
@@ -53,12 +52,13 @@ window.publier = async function(){
   const titre = document.getElementById('titre').value.trim();
   const prix = document.getElementById('prix').value.trim();
   const desc = document.getElementById('desc').value.trim();
+  const lieu = document.getElementById('lieu').value.trim();
+  const telephone = document.getElementById('tel').value.trim();
   const file = document.getElementById('photo').files[0];
   const btn = document.getElementById('btn');
   if(!nom || !titre || !file){ alert("Remplis nom, titre et photo"); return; }
   btn.disabled = true; btn.textContent = "Envoi en cours...";
 
-  // 1. Photo -> Cloudinary
   const fd = new FormData();
   fd.append('file', file);
   fd.append('upload_preset', UPLOAD_PRESET);
@@ -67,9 +67,8 @@ window.publier = async function(){
   const data = await res.json();
   if(!data.secure_url){ alert("Erreur Cloudinary: "+JSON.stringify(data)); btn.disabled=false; btn.textContent="Publier"; return; }
 
-  // 2. Lien -> TON Firebase pour que TOUT LE MONDE voit
   await push(ref(db, 'produits'), {
-    nom, titre, prix, desc,
+    nom, titre, prix, desc, lieu, telephone,
     photo: data.secure_url,
     date: Date.now()
   });
