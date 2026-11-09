@@ -10,15 +10,14 @@ h2{text-align:center;color:#0b4f8a}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:15px;max-width:950px;margin:auto}
 .card{background:white;border-radius:15px;overflow:hidden;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
 .card img{width:100%;height:200px;object-fit:cover;border-radius:12px;background:#eee;display:block}
-.badge{display:inline-block;background:#0b4f8a;color:white;font-size:13px;padding:6px 14px;border-radius:20px;font-weight:bold;margin:10px 0 5px}
-.titre{font-size:19px;font-weight:bold;margin:5px 0;color:#0b4f8a;text-transform:lowercase}
-.titre::first-letter{text-transform:uppercase}
+.badge{display:inline-block;background:#0b4f8a;color:white;font-size:13px;padding:6px 14px;border-radius:20px;font-weight:bold;margin:10px 0 5px;cursor:pointer;border:0}
+.titre{font-size:19px;font-weight:bold;margin:5px 0;color:#0b4f8a}
 .desc{color:#333;margin:5px 0}
 .info{color:#333;font-size:14px;margin:4px 0}
 .prix{display:inline-block;background:#fff3d6;color:#b77900;font-weight:bold;padding:6px 12px;border-radius:20px;margin-top:8px}
 .btns{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
 .btns button,.btns a{border:0;padding:9px 12px;border-radius:20px;font-weight:bold;cursor:pointer;text-decoration:none;font-size:13px}
-.cmd{background:#25D366;color:white;flex:1}
+.cmd{background:#25D366;color:white;flex:1;text-align:center}
 .prixBtn{background:#ff9f00;color:white}
 .descBtn{background:#fff;border:1px solid #999}
 .del{background:#ff3b30;color:white}
@@ -54,9 +53,8 @@ onValue(ref(db, 'produits'), (snap) => {
   document.getElementById('vide').style.display = 'none';
   Object.entries(data).reverse().forEach(([id, p]) => {
     const titre = p.titre || p.nom || "Sans titre";
-    // ICI C'EST LA CORRECTION : le badge bleu = le VRAI vendeur, pas "Vendeur HK"
     const vendeur = p.titre ? p.nom : "HK";
-    let photo = p.photo || p.image || p.imageUrl || p.img || p.photoURL || p.url || p.lien || "";
+    let photo = p.photo || p.image || p.imageUrl || p.img || p.photoURL || p.url || "";
     if(!photo){
       for(let v of Object.values(p)){
         if(typeof v === 'string' && (v.startsWith('data:image') || v.startsWith('http'))){ photo = v; break; }
@@ -64,14 +62,14 @@ onValue(ref(db, 'produits'), (snap) => {
     }
     const prix = p.prix || "";
     const desc = p.desc || p.description || "";
-    const lieu = p.lieu || p.ville || "";
+    const lieu = p.lieu || "";
     const tel = (p.telephone || p.tel || p.phone || "").replace(/\s/g,'');
     const dateStr = p.date ? new Date(p.date).toLocaleDateString() : "";
-    const waLink = tel ? `https://wa.me/${tel.startsWith('243') ? tel : '243' + tel.replace(/^0/, '')}?text=${encodeURIComponent('Bonjour, je veux commander : ' + titre + ' - ' + prix)}` : '#';
+    const waLink = tel ? `https://wa.me/${tel.startsWith('243') ? tel : '243' + tel.replace(/^0/, '')}?text=${encodeURIComponent('Bonjour, je veux commander : ' + titre)}` : '#';
 
     div.innerHTML += `<div class="card">
       <img src="${photo}">
-      <span class="badge">👤 ${vendeur}</span>
+      <button class="badge" onclick="changerVendeur('${id}','${titre}','${vendeur}')">👤 ${vendeur} ✏️</button>
       <div class="titre">${titre}</div>
       <div class="desc">${desc}</div>
       ${lieu ? `<div class="info">📍 ${lieu}</div>` : ``}
@@ -81,20 +79,27 @@ onValue(ref(db, 'produits'), (snap) => {
       <div class="btns">
         <a class="cmd" href="${waLink}" target="_blank">Commander</a>
         <button class="prixBtn" onclick="changerPrix('${id}','${prix}')">✏️ Prix</button>
-        <button class="descBtn" onclick="changerDesc('${id}','${desc.replace(/'/g,"")}')">✏️ Desc</button>
+        <button class="descBtn" onclick="changerDesc('${id}')">✏️ Desc</button>
         <button class="del" onclick="supprimer('${id}')">🗑 Supprimer</button>
       </div>
     </div>`;
   });
 });
 
+window.changerVendeur = async function(id, titreActuel, vendeurActuel){
+  const nouveau = prompt("Vrai vendeur pour " + titreActuel + " ?", vendeurActuel === "HK" ? "" : vendeurActuel);
+  if(!nouveau) return;
+  // Si c'est un ancien (pas de titre), on le transforme en nouveau : titre = ancien nom, nom = vrai vendeur
+  await update(ref(db, 'produits/'+id), { titre: titreActuel, nom: nouveau.trim() });
+  alert("Maintenant c'est 👤 " + nouveau);
+}
 window.changerPrix = async function(id, ancien){
   const nouveau = prompt("Nouveau prix ?", ancien);
   if(nouveau === null) return;
   await update(ref(db, 'produits/'+id), { prix: nouveau });
 }
-window.changerDesc = async function(id, ancien){
-  const nouveau = prompt("Nouvelle description ?", ancien);
+window.changerDesc = async function(id){
+  const nouveau = prompt("Nouvelle description ?");
   if(nouveau === null) return;
   await update(ref(db, 'produits/'+id), { desc: nouveau });
 }
