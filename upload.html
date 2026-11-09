@@ -9,12 +9,12 @@
 <body>
 <div class="box">
 <h2>➕ Publie ton produit</h2>
-<input id="nom" placeholder="Ton nom ex: KAKULE">
+<input id="nom" placeholder="Ton nom - Vendeur ex: KAKULE">
 <input id="titre" placeholder="Nom du produit ex: tableau">
 <input id="prix" placeholder="Prix ex: 10$">
 <textarea id="desc" placeholder="Description ex: Solide et lisse"></textarea>
-<input id="lieu" placeholder="Lieu ex: Goma, Butembo">
-<input id="tel" placeholder="Téléphone ex: +243...">
+<input id="lieu" placeholder="Lieu ex: Goma">
+<input id="tel" placeholder="Téléphone ex: 0976053534">
 <label style="font-weight:bold">📸 Choisis ta photo :</label>
 <input type="file" id="photo" accept="image/*">
 <img id="apercu">
@@ -26,7 +26,6 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
 const firebaseConfig = {
   apiKey: "AIzaSyAjAXZJDJyHCN5ed5fJQY1DzRA_Kq3h5Rs",
   authDomain: "tphk-gallery.firebaseapp.com",
@@ -39,12 +38,17 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-const CLOUD_NAME = "sogn1cr8";
-const UPLOAD_PRESET = "hekima_presset";
-
+let photoBase64 = "";
 document.getElementById('photo').addEventListener('change', e => {
   const f = e.target.files[0];
-  if(f){ const img = document.getElementById('apercu'); img.src = URL.createObjectURL(f); img.style.display='block'; }
+  if(!f) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    photoBase64 = ev.target.result;
+    const img = document.getElementById('apercu');
+    img.src = photoBase64; img.style.display='block';
+  };
+  reader.readAsDataURL(f);
 });
 
 window.publier = async function(){
@@ -54,26 +58,15 @@ window.publier = async function(){
   const desc = document.getElementById('desc').value.trim();
   const lieu = document.getElementById('lieu').value.trim();
   const telephone = document.getElementById('tel').value.trim();
-  const file = document.getElementById('photo').files[0];
   const btn = document.getElementById('btn');
-  if(!nom || !titre || !file){ alert("Remplis nom, titre et photo"); return; }
-  btn.disabled = true; btn.textContent = "Envoi en cours...";
-
-  const fd = new FormData();
-  fd.append('file', file);
-  fd.append('upload_preset', UPLOAD_PRESET);
-  fd.append('folder', 'hekima');
-  const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {method:'POST', body: fd});
-  const data = await res.json();
-  if(!data.secure_url){ alert("Erreur Cloudinary: "+JSON.stringify(data)); btn.disabled=false; btn.textContent="Publier"; return; }
-
+  if(!nom || !titre || !photoBase64){ alert("Remplis vendeur, produit et photo"); return; }
+  btn.disabled = true; btn.textContent = "Envoi...";
   await push(ref(db, 'produits'), {
     nom, titre, prix, desc, lieu, telephone,
-    photo: data.secure_url,
+    photo: photoBase64,
     date: Date.now()
   });
-
-  alert("Publié pour tout le monde ! 🌍");
+  alert("Publié ! 🌍");
   window.location.href = "gallery.html";
 }
 </script>
