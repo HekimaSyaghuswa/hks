@@ -4,19 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Galerie - HK</title>
-<style>
-body{background:#f4f6fb;font-family:Arial;margin:0;padding:20px}
-h2{text-align:center;color:#0b4f8a}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:15px;max-width:900px;margin:auto}
-.card{background:white;border-radius:15px;overflow:hidden;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.card img{width:100%;height:200px;object-fit:cover;border-radius:12px}
-.badge{display:inline-block;background:#0b4f8a;color:white;font-size:12px;padding:5px 12px;border-radius:20px;font-weight:bold;margin:10px 0 5px}
-.titre{font-size:19px;font-weight:bold;text-transform:uppercase;margin:5px 0;color:#111}
-.desc{color:#444;margin:5px 0}
-.info{color:#555;font-size:14px;margin:3px 0}
-.prix{display:inline-block;background:#fff3d6;color:#b77900;font-weight:bold;padding:6px 12px;border-radius:20px;margin-top:8px}
-a{display:block;text-align:center;margin-top:20px;color:#0b4f8a;font-weight:bold}
-</style>
+<style>body{background:#f4f6fb;font-family:Arial;margin:0;padding:20px}h2{text-align:center;color:#0b4f8a}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:15px;max-width:900px;margin:auto}.card{background:white;border-radius:12px;overflow:hidden}.card img{width:100%;height:180px;object-fit:cover}.card div{padding:10px}a{display:block;text-align:center;margin-top:20px;color:#0b4f8a;font-weight:bold}</style>
 </head>
 <body>
 <h2>🖼️ Galerie HK - Tout le monde voit tout</h2>
@@ -47,27 +35,24 @@ onValue(ref(db, 'produits'), (snap) => {
   if(!data){ document.getElementById('vide').textContent = "Aucune photo pour l'instant"; return; }
   document.getElementById('vide').style.display = 'none';
   Object.values(data).reverse().forEach(p => {
-    const titre = p.titre || p.title || p.produit || p.nomProduit || p.name || "Sans titre";
-    const photo = p.photo || p.image || p.imageUrl || p.url || p.photoURL || "";
-    const nom = p.nom || p.auteur || p.vendeur || "Inconnu";
+    // 1. PHOTO : on cherche dans TOUS les noms possibles, même ceux qu'on ne connait pas
+    let photo = p.photo || p.image || p.imageUrl || p.img || p.photoURL || p.url || p.lien || p.link || "";
+    if(!photo){
+      // Si toujours pas trouvé, on cherche n'importe quelle valeur qui ressemble à un lien http
+      for(let v of Object.values(p)){
+        if(typeof v === 'string' && v.startsWith('http') && (v.includes('cloudinary') || v.includes('.jpg') || v.includes('.png') || v.includes('.webp') || v.includes('firebasestorage'))){
+          photo = v; break;
+        }
+      }
+    }
+    // 2. TITRE : si c'est un NOUVEAU (titre existe), on prend titre. Si c'est un ANCIEN (pas de titre), on prend nom comme titre
+    const isNouveau = !!(p.titre || p.title || p.produit || p.nomProduit);
+    const titre = p.titre || p.title || p.produit || p.nomProduit || p.name || p.nom || "Sans titre";
+    // 3. VENDEUR : si nouveau, vendeur = nom. Si ancien, on ne connait pas le vendeur, on met "HK"
+    const nom = isNouveau ? (p.nom || p.auteur || p.vendeur || "Inconnu") : "HK";
     const prix = p.prix || p.price || "";
     const desc = p.desc || p.description || "";
-    const lieu = p.lieu || p.ville || p.adresse || "";
-    const tel = p.telephone || p.tel || p.phone || p.numero || "";
-    const date = p.date ? new Date(p.date).toLocaleDateString() : "";
-
-    div.innerHTML += `
-    <div class="card">
-      <img src="${photo}">
-      <span class="badge">👤 Vendeur HK</span>
-      <div class="titre">${titre}</div>
-      <div class="info">Vendeur : <b>${nom}</b></div>
-      <div class="desc">${desc}</div>
-      ${lieu ? `<div class="info">📍 ${lieu}</div>` : ``}
-      ${tel ? `<div class="info">📱 ${tel}</div>` : ``}
-      ${date ? `<div class="info">📅 ${date}</div>` : ``}
-      ${prix ? `<div class="prix">${prix}</div>` : ``}
-    </div>`;
+    div.innerHTML += `<div class="card"><img src="${photo}" onerror="this.src='https://via.placeholder.com/300?text=Photo'"><div><b>${titre}</b><br><small>Par ${nom} - ${prix}</small><br><small>${desc}</small></div></div>`;
   });
 });
 </script>
