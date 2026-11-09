@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corriger vendeurs - HK</title>
+<style>body{background:#f4f6fb;font-family:Arial;padding:20px}h2{text-align:center;color:#0b4f8a}.card{background:white;padding:12px;border-radius:12px;margin:10px auto;max-width:500px;display:flex;gap:10px;align-items:center}.card img{width:70px;height:70px;object-fit:cover;border-radius:8px}input{flex:1;padding:10px;border:1px solid #ddd;border-radius:8px}button{background:#0b4f8a;color:white;border:0;padding:10px 15px;border-radius:8px;font-weight:bold}</style>
+</head>
+<body>
+<h2>✏️ Corriger les vendeurs</h2>
+<div id="liste"></div>
+<a href="gallery.html" style="display:block;text-align:center;margin-top:20px;font-weight:bold;color:#0b4f8a">Retour Galerie</a>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyAjAXZJDJyHCN5ed5fJQY1DzRA_Kq3h5Rs",
+  authDomain: "tphk-gallery.firebaseapp.com",
+  databaseURL: "https://tphk-gallery-default-rtdb.firebaseio.com",
+  projectId: "tphk-gallery",
+  storageBucket: "tphk-gallery.firebasestorage.app",
+  messagingSenderId: "212082158055",
+  appId: "1:212082158055:web:fccaadb4785f511071b542"
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+onValue(ref(db, 'produits'), (snap) => {
+  const div = document.getElementById('liste');
+  div.innerHTML = '';
+  const data = snap.val();
+  if(!data) return;
+  Object.entries(data).forEach(([id, p]) => {
+    const titre = p.titre || p.nom || "Sans titre";
+    const photo = p.photo || p.image || "";
+    // Si c'est un ancien, on montre son nom actuel comme vendeur à corriger
+    // Si c'est un nouveau, on montre déjà le bon vendeur
+    const vendeurActuel = p.titre ? p.nom : "";
+    div.innerHTML += `
+    <div class="card">
+      <img src="${photo}">
+      <div style="flex:1">
+        <b>${titre}</b><br>
+        <small>Vendeur actuel : ${p.titre ? p.nom : "HK (ancien, à corriger)"}</small><br>
+        <input id="v-${id}" value="${vendeurActuel}" placeholder="Vrai vendeur ex: Jean">
+      </div>
+      <button onclick="corriger('${id}')">Sauver</button>
+    </div>`;
+  });
+});
+
+window.corriger = async function(id){
+  const nouveauVendeur = document.getElementById('v-'+id).value.trim();
+  if(!nouveauVendeur){ alert("Écris le nom du vendeur"); return; }
+  // On transforme l'ancien en nouveau : on met le titre = ancien nom, et nom = vrai vendeur
+  // D'abord on récupère l'ancien nom
+  const snap = await new Promise(res => {
+    onValue(ref(db, 'produits/'+id), s => res(s.val()), {onlyOnce:true});
+  });
+  const titreFinal = snap.titre || snap.nom;
+  await update(ref(db, 'produits/'+id), {
+    titre: titreFinal,
+    nom: nouveauVendeur
+  });
+  alert("Corrigé ! " + titreFinal + " -> Vendeur : " + nouveauVendeur);
+}
+</script>
+</body>
+</html>
