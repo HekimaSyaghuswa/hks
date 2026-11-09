@@ -7,26 +7,33 @@
 <style>
 body{background:#f4f6fb;font-family:Arial;margin:0;padding:20px}
 h2{text-align:center;color:#0b4f8a}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:15px;max-width:900px;margin:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:15px;max-width:950px;margin:auto}
 .card{background:white;border-radius:15px;overflow:hidden;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.card img{width:100%;height:200px;object-fit:cover;border-radius:12px;background:#eee}
-.badge{display:inline-block;background:#0b4f8a;color:white;font-size:12px;padding:5px 12px;border-radius:20px;font-weight:bold;margin:10px 0 5px}
-.titre{font-size:19px;font-weight:bold;text-transform:uppercase;margin:5px 0;color:#111}
-.desc{color:#444;margin:5px 0}
-.info{color:#555;font-size:14px;margin:3px 0}
+.card img{width:100%;height:200px;object-fit:cover;border-radius:12px;background:#eee;display:block}
+.badge{display:inline-block;background:#0b4f8a;color:white;font-size:13px;padding:6px 14px;border-radius:20px;font-weight:bold;margin:10px 0 5px}
+.titre{font-size:19px;font-weight:bold;margin:5px 0;color:#0b4f8a;text-transform:lowercase}
+.titre::first-letter{text-transform:uppercase}
+.desc{color:#333;margin:5px 0}
+.info{color:#333;font-size:14px;margin:4px 0}
 .prix{display:inline-block;background:#fff3d6;color:#b77900;font-weight:bold;padding:6px 12px;border-radius:20px;margin-top:8px}
-a{display:block;text-align:center;margin-top:20px;color:#0b4f8a;font-weight:bold}
+.btns{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.btns button,.btns a{border:0;padding:9px 12px;border-radius:20px;font-weight:bold;cursor:pointer;text-decoration:none;font-size:13px}
+.cmd{background:#25D366;color:white;flex:1}
+.prixBtn{background:#ff9f00;color:white}
+.descBtn{background:#fff;border:1px solid #999}
+.del{background:#ff3b30;color:white}
+a.retour{display:block;text-align:center;margin-top:20px;color:#0b4f8a;font-weight:bold}
 </style>
 </head>
 <body>
 <h2>🖼️ Galerie HK - Tout le monde voit tout</h2>
 <div class="grid" id="galerie"></div>
 <p id="vide" style="text-align:center">Chargement...</p>
-<a href="upload.html">➕ Publier</a>
+<a class="retour" href="upload.html">➕ Publier</a>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 const firebaseConfig = {
   apiKey: "AIzaSyAjAXZJDJyHCN5ed5fJQY1DzRA_Kq3h5Rs",
   authDomain: "tphk-gallery.firebaseapp.com",
@@ -45,44 +52,56 @@ onValue(ref(db, 'produits'), (snap) => {
   const data = snap.val();
   if(!data){ document.getElementById('vide').textContent = "Aucune photo pour l'instant"; return; }
   document.getElementById('vide').style.display = 'none';
-  Object.values(data).reverse().forEach(p => {
-    // 1. TITRE / VENDEUR - comme avant, sans duplication
+  Object.entries(data).reverse().forEach(([id, p]) => {
     const titre = p.titre || p.nom || "Sans titre";
+    // ICI C'EST LA CORRECTION : le badge bleu = le VRAI vendeur, pas "Vendeur HK"
     const vendeur = p.titre ? p.nom : "HK";
-
-    // 2. PHOTO - ON CHERCHE PARTOUT : c'est ça qui répare ton image cassée
-    let photo = p.photo || p.image || p.imageUrl || p.img || p.photoURL || p.url || p.lien || p.link || "";
+    let photo = p.photo || p.image || p.imageUrl || p.img || p.photoURL || p.url || p.lien || "";
     if(!photo){
-      // Si toujours rien, on scanne TOUTES les valeurs du produit
       for(let v of Object.values(p)){
-        if(typeof v === 'string' && (
-          v.startsWith('data:image') || // nouvelle version base64 sans Cloudinary
-          v.startsWith('http') // ancienne version Cloudinary
-        )){
-          photo = v; break;
-        }
+        if(typeof v === 'string' && (v.startsWith('data:image') || v.startsWith('http'))){ photo = v; break; }
       }
     }
-
-    const prix = p.prix || p.price || "";
+    const prix = p.prix || "";
     const desc = p.desc || p.description || "";
     const lieu = p.lieu || p.ville || "";
-    const tel = p.telephone || p.tel || p.phone || "";
+    const tel = (p.telephone || p.tel || p.phone || "").replace(/\s/g,'');
     const dateStr = p.date ? new Date(p.date).toLocaleDateString() : "";
+    const waLink = tel ? `https://wa.me/${tel.startsWith('243') ? tel : '243' + tel.replace(/^0/, '')}?text=${encodeURIComponent('Bonjour, je veux commander : ' + titre + ' - ' + prix)}` : '#';
 
     div.innerHTML += `<div class="card">
-      <img src="${photo}" onerror="this.onerror=null;this.src='https://via.placeholder.com/400x200?text=HK'">
-      <span class="badge">👤 Vendeur HK</span>
+      <img src="${photo}">
+      <span class="badge">👤 ${vendeur}</span>
       <div class="titre">${titre}</div>
-      <div class="info">Vendeur : <b>${vendeur}</b></div>
       <div class="desc">${desc}</div>
       ${lieu ? `<div class="info">📍 ${lieu}</div>` : ``}
       ${tel ? `<div class="info">📱 ${tel}</div>` : ``}
       ${dateStr ? `<div class="info">📅 ${dateStr}</div>` : ``}
       ${prix ? `<div class="prix">${prix}</div>` : ``}
+      <div class="btns">
+        <a class="cmd" href="${waLink}" target="_blank">Commander</a>
+        <button class="prixBtn" onclick="changerPrix('${id}','${prix}')">✏️ Prix</button>
+        <button class="descBtn" onclick="changerDesc('${id}','${desc.replace(/'/g,"")}')">✏️ Desc</button>
+        <button class="del" onclick="supprimer('${id}')">🗑 Supprimer</button>
+      </div>
     </div>`;
   });
 });
+
+window.changerPrix = async function(id, ancien){
+  const nouveau = prompt("Nouveau prix ?", ancien);
+  if(nouveau === null) return;
+  await update(ref(db, 'produits/'+id), { prix: nouveau });
+}
+window.changerDesc = async function(id, ancien){
+  const nouveau = prompt("Nouvelle description ?", ancien);
+  if(nouveau === null) return;
+  await update(ref(db, 'produits/'+id), { desc: nouveau });
+}
+window.supprimer = async function(id){
+  if(!confirm("Supprimer ce produit ?")) return;
+  await remove(ref(db, 'produits/'+id));
+}
 </script>
 </body>
 </html>
