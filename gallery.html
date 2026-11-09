@@ -55,7 +55,7 @@ function charger(){
           <h3>${x.nom}</h3>
           <p>${x.desc || ''}</p>
           <p>📍 ${x.adresse}<br>📱 ${x.tel}<br>📅 ${x.date || ''}</p>
-          <span class="prix">${x.prix} FC</span><br>
+          <span class="prix">${x.prix} </span><br>
           <a class="btn-commander" href="https://wa.me/243${String(x.tel || '').replace(/[^0-9]/g,'').slice(-9)}">Commander</a>
           <button class="btn-modifier" onclick="modifierPrix('${id}','${x.prix}')">✏️ Prix</button>
           <button class="btn-supprimer" onclick="supprimerProduit('${id}')">🗑 Supprimer</button>
@@ -82,7 +82,7 @@ async function modifierPrix(id, ancienPrix){
   let mdp = prompt("🔒 Mot de passe Admin pour modifier le prix :");
   if(mdp === null) return;
   if(mdp !== MOT_DE_PASSE){ alert("Mot de passe incorrect !"); return; }
-  let nouveauPrix = prompt("Nouveau prix (ex: 20000 FC) :", ancienPrix);
+  let nouveauPrix = prompt("Nouveau prix (ex: 20000 FC/$) :", ancienPrix);
   if(nouveauPrix === null || nouveauPrix.trim() === "") return;
   await fetch(BASE+"/produits/"+id+".json",{method:"PATCH", body: JSON.stringify({prix: nouveauPrix.trim()})});
   alert("Prix modifié !");
