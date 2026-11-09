@@ -34,9 +34,14 @@ onValue(ref(db, 'produits'), (snap) => {
   const data = snap.val();
   if(!data){ document.getElementById('vide').textContent = "Aucune photo pour l'instant"; return; }
   document.getElementById('vide').style.display = 'none';
-  // On inverse pour voir les plus récents en premier
   Object.values(data).reverse().forEach(p => {
-    div.innerHTML += `<div class="card"><img src="${p.photo}"><div><b>${p.titre}</b><br><small>Par ${p.nom} - ${p.prix||''}</small><br><small>${p.desc||''}</small></div></div>`;
+    // ICI C'EST LA CORRECTION - il comprend les anciens et les nouveaux
+    const titre = p.titre || p.title || p.produit || p.nomProduit || p.name || "Sans titre";
+    const photo = p.photo || p.image || p.imageUrl || p.url || p.photoURL || "";
+    const nom = p.nom || p.auteur || p.vendeur || "Inconnu";
+    const prix = p.prix || p.price || "";
+    const desc = p.desc || p.description || "";
+    div.innerHTML += `<div class="card"><img src="${photo}"><div><b>${titre}</b><br><small>Par ${nom} - ${prix}</small><br><small>${desc}</small></div></div>`;
   });
 });
 </script>
