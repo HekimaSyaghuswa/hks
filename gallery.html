@@ -33,6 +33,12 @@ a.retour{display:block;text-align:center;margin-top:20px;color:#0b4f8a;font-weig
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+const CODE_ADMIN = "HK1234";
+function demanderCode(){
+  const code = prompt("🔐 Code admin pour modifier / supprimer ?");
+  if(code !== CODE_ADMIN){ alert("Code faux ! Action bloquée."); return false; }
+  return true;
+}
 const firebaseConfig = {
   apiKey: "AIzaSyAjAXZJDJyHCN5ed5fJQY1DzRA_Kq3h5Rs",
   authDomain: "tphk-gallery.firebaseapp.com",
@@ -52,7 +58,7 @@ onValue(ref(db, 'produits'), (snap) => {
   if(!data){ document.getElementById('vide').textContent = "Aucune photo pour l'instant"; return; }
   document.getElementById('vide').style.display = 'none';
   Object.entries(data).reverse().forEach(([id, p]) => {
-    const titre = p.titre || p.nom || "Sans titre";
+    const titre = p.titre || p.nom || "";
     const vendeur = p.titre ? p.nom : "HK";
     let photo = p.photo || p.image || p.imageUrl || p.img || p.photoURL || p.url || "";
     if(!photo){
@@ -62,10 +68,12 @@ onValue(ref(db, 'produits'), (snap) => {
     }
     const prix = p.prix || "";
     const desc = p.desc || p.description || "";
-    const lieu = p.lieu || "";
-    const tel = (p.telephone || p.tel || p.phone || "").replace(/\s/g,'');
-    const dateStr = p.date ? new Date(p.date).toLocaleDateString() : "";
-    const waLink = tel ? `https://wa.me/${tel.startsWith('243') ? tel : '243' + tel.replace(/^0/, '')}?text=${encodeURIComponent('Bonjour, je veux commander : ' + titre)}` : '#';
+    const lieu = p.lieu || p.ville || "";
+    const tel = p.telephone || p.tel || p.phone || "";
+    // DATE PROPRE : on convertit le gros chiffre 1794262454462 en date lisible
+    let dateStr = "";
+    if(p.date){ const d = new Date(Number(p.date)); if(!isNaN(d)) dateStr = d.toLocaleDateString(); }
+    const waLink = tel ? `https://wa.me/${String(tel).replace(/\s/g,'').startsWith('243') ? String(tel).replace(/\s/g,'') : '243' + String(tel).replace(/\s/g,'').replace(/^0/, '')}?text=${encodeURIComponent('Bonjour, je veux commander : ' + titre)}` : '#';
 
     div.innerHTML += `<div class="card">
       <img src="${photo}">
@@ -85,25 +93,26 @@ onValue(ref(db, 'produits'), (snap) => {
     </div>`;
   });
 });
-
 window.changerVendeur = async function(id, titreActuel, vendeurActuel){
+  if(!demanderCode()) return;
   const nouveau = prompt("Vrai vendeur pour " + titreActuel + " ?", vendeurActuel === "HK" ? "" : vendeurActuel);
   if(!nouveau) return;
-  // Si c'est un ancien (pas de titre), on le transforme en nouveau : titre = ancien nom, nom = vrai vendeur
   await update(ref(db, 'produits/'+id), { titre: titreActuel, nom: nouveau.trim() });
-  alert("Maintenant c'est 👤 " + nouveau);
 }
 window.changerPrix = async function(id, ancien){
+  if(!demanderCode()) return;
   const nouveau = prompt("Nouveau prix ?", ancien);
   if(nouveau === null) return;
   await update(ref(db, 'produits/'+id), { prix: nouveau });
 }
 window.changerDesc = async function(id){
+  if(!demanderCode()) return;
   const nouveau = prompt("Nouvelle description ?");
   if(nouveau === null) return;
   await update(ref(db, 'produits/'+id), { desc: nouveau });
 }
 window.supprimer = async function(id){
+  if(!demanderCode()) return;
   if(!confirm("Supprimer ce produit ?")) return;
   await remove(ref(db, 'produits/'+id));
 }

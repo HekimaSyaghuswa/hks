@@ -9,12 +9,12 @@
 <body>
 <div class="box">
 <h2>➕ Publie ton produit</h2>
-<input id="nom" placeholder="Ton nom - Vendeur ex: KAKULE">
-<input id="titre" placeholder="Nom du produit ex: tableau">
-<input id="prix" placeholder="Prix ex: 10$">
-<textarea id="desc" placeholder="Description ex: Solide et lisse"></textarea>
+<input id="nom" placeholder="Ton nom - Vendeur ex: Gustave">
+<input id="titre" placeholder="Nom du produit ex: Faustine">
+<input id="prix" placeholder="Prix ex: 20$">
+<textarea id="desc" placeholder="Description ex: Original v"></textarea>
 <input id="lieu" placeholder="Lieu ex: Goma">
-<input id="tel" placeholder="Téléphone ex: 0976053534">
+<input id="telephone" placeholder="Téléphone ex: 0976053534">
 <label style="font-weight:bold">📸 Choisis ta photo :</label>
 <input type="file" id="photo" accept="image/*">
 <img id="apercu">
@@ -57,14 +57,13 @@ window.publier = async function(){
   const prix = document.getElementById('prix').value.trim();
   const desc = document.getElementById('desc').value.trim();
   const lieu = document.getElementById('lieu').value.trim();
-  const telephone = document.getElementById('tel').value.trim();
+  const telephone = document.getElementById('telephone').value.trim();
   const btn = document.getElementById('btn');
   if(!nom || !titre || !photoBase64){ alert("Remplis vendeur, produit et photo"); return; }
   btn.disabled = true; btn.textContent = "Envoi...";
   await push(ref(db, 'produits'), {
-    nom, titre, prix, desc, lieu, telephone,
-    photo: photoBase64,
-    date: Date.now()
+    nom: nom, titre: titre, prix: prix, desc: desc, lieu: lieu, telephone: telephone,
+    photo: photoBase64, date: Date.now()
   });
   alert("Publié ! 🌍");
   window.location.href = "gallery.html";
