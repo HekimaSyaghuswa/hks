@@ -16,7 +16,6 @@
 <input id="prix" placeholder="Prix ex: 5000 FC">
 <textarea id="desc" placeholder="Description du produit"></textarea>
 
-<!-- ON NE MET PLUS DE CHAMP LIEN - QUE LA PHOTO -->
 <label style="font-weight:bold">📸 Choisis ta photo :</label>
 <input type="file" id="photo" accept="image/*">
 <img id="apercu">
@@ -30,9 +29,9 @@
 </div>
 
 <script>
-// ===== TON CLOUDINARY - DÉJÀ REMPLI =====
+// ===== TON CLOUDINARY - CORRIGÉ =====
 const CLOUD_NAME = "sogn1cr8";
-const UPLOAD_PRESET = "hekima_presset";
+const UPLOAD_PRESET = "hekima_presset"; // Ton preset avec 2 S, c'est bon
 
 // Aperçu photo
 document.getElementById('photo').addEventListener('change', e => {
@@ -62,7 +61,7 @@ async function publier(){
     // 1. ENVOI VERS TON CLOUDINARY sogn1cr8
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('upload_presset', UPLOAD_PRESET);
+    formData.append('upload_preset', UPLOAD_PRESET); // ✅ CORRIGÉ ICI : 1 seul S
     formData.append('folder', 'hekima');
 
     const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
@@ -73,18 +72,14 @@ async function publier(){
     console.log(data);
 
     if(!data.secure_url){
-      alert("Erreur Cloudinary : Vérifie que ton preset hekima_preset est bien en Unsigned ! " + JSON.stringify(data));
+      alert("Erreur Cloudinary : " + JSON.stringify(data));
       btn.disabled = false; btn.textContent = "Publier"; return;
     }
 
     const lienPhoto = data.secure_url;
     msg.textContent = "✅ Photo sauvegardée dans ton Cloudinary !";
 
-    // 2. SAUVEGARDE DANS FIREBASE / LOCALSTORAGE - GARDE TON ANCIEN CODE ICI
-    // Si tu utilises Firebase, mets ici ton code :
-    // db.collection("produits").add({ nom, titre, prix, desc, photo: lienPhoto, date: Date.now() })
-    
-    // Pour l'instant, on sauvegarde en local pour tester :
+    // 2. SAUVEGARDE EN LOCAL (pour tester)
     let produits = JSON.parse(localStorage.getItem('produits') || '[]');
     produits.push({ nom, titre, prix, desc, photo: lienPhoto, date: Date.now() });
     localStorage.setItem('produits', JSON.stringify(produits));
