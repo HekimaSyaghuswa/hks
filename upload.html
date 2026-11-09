@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Publier - HK</title>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Publier - HK</title>
 <style>*{box-sizing:border-box;font-family:Arial}body{background:#f4f6fb;margin:0;padding:20px}.box{max-width:500px;margin:auto;background:white;padding:25px;border-radius:15px}h2{color:#0b4f8a;text-align:center}input,textarea{width:100%;padding:13px;margin:8px 0;border:1px solid #ddd;border-radius:10px}button{width:100%;background:#25D366;color:white;border:0;padding:15px;border-radius:10px;font-weight:bold;font-size:17px}button:disabled{opacity:.6}a{display:block;text-align:center;margin-top:15px;color:#0b4f8a;font-weight:bold}img{width:100%;border-radius:10px;margin-top:10px;display:none}</style>
 </head>
 <body>
@@ -8,51 +11,90 @@
 <h2>➕ Publie ton produit</h2>
 <p style="text-align:center">Tout le monde dans le monde entier verra ton produit !</p>
 
-<!-- ICI LES CHAMPS -->
-<input id="nom" placeholder="Nom du produit * ex: Sac à dos">
-<input id="vendeur" placeholder="Ton nom / Ta place * ex: HK Papeterie - Butembo">
-<input id="prix" placeholder="Prix * ex: 15000 FC">
-<input id="adresse" placeholder="Ton adresse * ex: Butembo, Kitatumba">
-<input id="tel" placeholder="Ton WhatsApp * ex: 0976053534">
-<textarea id="desc" placeholder="Description"></textarea>
-<label><b>Photo du produit *</b></label>
-<input type="file" id="photo" accept="image/*"><img id="preview">
-<button id="btn" onclick="publier()">📤 Publier pour tout le monde</button>
-<a href="index.html">⬅ Retour</a>
+<input id="nom" placeholder="Ton nom ex: Hekima">
+<input id="titre" placeholder="Nom du produit ex: Cahier 200 pages">
+<input id="prix" placeholder="Prix ex: 5000 FC">
+<textarea id="desc" placeholder="Description du produit"></textarea>
+
+<!-- ON NE MET PLUS DE CHAMP LIEN - QUE LA PHOTO -->
+<label style="font-weight:bold">📸 Choisis ta photo :</label>
+<input type="file" id="photo" accept="image/*">
+<img id="apercu">
+
+<button id="btn" onclick="publier()">Publier</button>
+<p id="msg" style="text-align:center;color:green;font-weight:bold"></p>
+
+<a href="index.html">← Voir Catalogue</a>
+<a href="gallery.html">🖼️ Voir Galerie</a>
+<a href="portfolio.html">👤 Mon Portfolio</a>
 </div>
+
 <script>
-const BASE = "https://tphk-gallery-default-rtdb.firebaseio.com";
-let imgData="";
-document.getElementById('photo').addEventListener('change',e=>{
-  let file=e.target.files[0]; if(!file) return;
-  let reader=new FileReader();
-  reader.onload=ev=>{
-    let img=new Image(); img.onload=()=>{
-      let c=document.createElement('canvas'); let max=800; let w=img.width,h=img.height;
-      if(w>max){h=h*max/w;w=max;} c.width=w;c.height=h; c.getContext('2d').drawImage(img,0,0,w,h);
-      imgData=c.toDataURL('image/jpeg',0.7);
-      let p=document.getElementById('preview'); p.src=imgData; p.style.display='block';
-    }; img.src=ev.target.result;
-  }; reader.readAsDataURL(file);
+// ===== TON CLOUDINARY - DÉJÀ REMPLI =====
+const CLOUD_NAME = "sogn1cr8";
+const UPLOAD_PRESET = "hekima_preset";
+
+// Aperçu photo
+document.getElementById('photo').addEventListener('change', e => {
+  const f = e.target.files[0];
+  if(f){
+    const url = URL.createObjectURL(f);
+    const img = document.getElementById('apercu');
+    img.src = url; img.style.display = 'block';
+  }
 });
 
 async function publier(){
-  let nom=document.getElementById('nom').value.trim();
-  let vendeur=document.getElementById('vendeur').value.trim();
-  let prix=document.getElementById('prix').value.trim();
-  let adresse=document.getElementById('adresse').value.trim();
-  let tel=document.getElementById('tel').value.trim();
-  let desc=document.getElementById('desc').value.trim();
-  if(!nom||!vendeur||!prix||!adresse||!tel||!imgData){alert("Remplis Nom, Ton nom, Prix, Adresse, Téléphone et Photo !");return;}
-  let btn=document.getElementById('btn');
-  btn.disabled=true; btn.innerText="Envoi en cours...";
+  const nom = document.getElementById('nom').value.trim();
+  const titre = document.getElementById('titre').value.trim();
+  const prix = document.getElementById('prix').value.trim();
+  const desc = document.getElementById('desc').value.trim();
+  const file = document.getElementById('photo').files[0];
+  const btn = document.getElementById('btn');
+  const msg = document.getElementById('msg');
+
+  if(!nom || !titre || !file){ alert("Remplis nom, titre et choisis une photo"); return; }
+
+  btn.disabled = true; btn.textContent = "Envoi en cours...";
+  msg.textContent = "Envoi vers ton Cloudinary...";
+
   try{
-    await fetch(BASE+"/produits.json",{method:"POST",body:JSON.stringify({nom,vendeur,prix,adresse,tel,desc,img:imgData,date:new Date().toLocaleDateString()})});
-    alert("Publié ! Tout le monde peut maintenant le voir !");
-    window.location.href='index.html#galerie-publique';
+    // 1. ENVOI VERS TON CLOUDINARY sogn1cr8
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', UPLOAD_PRESET);
+    formData.append('folder', 'hekima');
+
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    console.log(data);
+
+    if(!data.secure_url){
+      alert("Erreur Cloudinary : Vérifie que ton preset hekima_preset est bien en Unsigned ! " + JSON.stringify(data));
+      btn.disabled = false; btn.textContent = "Publier"; return;
+    }
+
+    const lienPhoto = data.secure_url;
+    msg.textContent = "✅ Photo sauvegardée dans ton Cloudinary !";
+
+    // 2. SAUVEGARDE DANS FIREBASE / LOCALSTORAGE - GARDE TON ANCIEN CODE ICI
+    // Si tu utilises Firebase, mets ici ton code :
+    // db.collection("produits").add({ nom, titre, prix, desc, photo: lienPhoto, date: Date.now() })
+    
+    // Pour l'instant, on sauvegarde en local pour tester :
+    let produits = JSON.parse(localStorage.getItem('produits') || '[]');
+    produits.push({ nom, titre, prix, desc, photo: lienPhoto, date: Date.now() });
+    localStorage.setItem('produits', JSON.stringify(produits));
+
+    alert("Publié ! Ta photo est maintenant dans ta Library Cloudinary > dossier hekima");
+    window.location.href = "gallery.html";
+
   }catch(e){
-    alert("Erreur, réessaie. Vérifie ta connexion.");
-    btn.disabled=false; btn.innerText="📤 Publier pour tout le monde";
+    alert("Erreur : " + e.message);
+    btn.disabled = false; btn.textContent = "Publier";
   }
 }
 </script>
