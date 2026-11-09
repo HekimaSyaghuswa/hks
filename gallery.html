@@ -50,14 +50,14 @@ function charger(){
     }
     document.getElementById('gal').innerHTML = entrees.map(([id, x])=>`
       <div class="card">
-        <img src="${x.img}">
+        <img src="${x.img}" alt="${x.nom}">
         <div>
           <span class="vendeur-badge">👤 ${x.vendeur || 'Vendeur HK'}</span>
           <h3>${x.nom}</h3>
           <p>${x.desc || ''}</p>
           <p>📍 ${x.adresse}<br>📱 ${x.tel}<br>📅 ${x.date || ''}</p>
           <span class="prix">${x.prix} FC</span><br>
-          <a class="btn-commander" href="https://wa.me/243${String(x.tel).replace(/[^0-9]/g,'').slice(-9)}">Commander</a>
+          <a class="btn-commander" href="https://wa.me/243${String(x.tel || '').replace(/[^0-9]/g,'').slice(-9)}">Commander</a>
           ${EST_ADMIN ? `<button class="btn-supprimer" onclick="supprimerProduit('${id}')">🗑 Supprimer</button>` : ''}
         </div>
       </div>
