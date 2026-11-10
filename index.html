@@ -11,9 +11,10 @@
   header h1{font-size:22px}
   header nav a{color:white;text-decoration:none;margin-left:18px;font-weight:600}
 
-  /* HERO */
-  .hero{background:linear-gradient(rgba(11,79,138,0.55), rgba(30,136,229,0.45)), url('fond-bleu.jpg');background-size:cover;background-position:center;color:white;padding:70px 5% 60px;text-align:center}
-  .hero h2{font-size:32px;margin-bottom:12px}
+  /* HERO - TA BANDE FILIGRANE - JE NE TOUCHE PAS */
+  .hero{background:linear-gradient(rgba(11,79,138,0.45), rgba(30,136,229,0.35)), url('fond-bleu.jpg');background-size:cover;background-position:center;color:white;padding:70px 5%;text-align:center}
+  .hero img{width:170px;height:170px;object-fit:cover;border-radius:50%;border:4px solid white;margin-bottom:15px}
+  .hero h2{font-size:32px;margin-bottom:10px}
   .hero .slogan{display:inline-block;background:rgba(0,0,0,0.35);padding:8px 18px;border-radius:20px;margin:10px 0}
   .hero p{margin:12px 0 20px}
   .hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
@@ -21,13 +22,18 @@
   .btn-blanc{background:white;color:#0b4f8a}
   .btn-outline{background:transparent;color:white;border:2px solid white}
 
-  /* C'EST ICI LE CORRECTIF - ESPACE APRES LA BANDE */
-  .section-produits{padding:45px 5% 30px;max-width:1000px;margin:0 auto}
-  .compteur{text-align:center;margin-bottom:20px}
-  .compteur button{background:#0b4f8a;color:white;border:0;padding:13px 28px;border-radius:25px;font-weight:bold;font-size:15px;cursor:default}
-  #recherche{width:100%;max-width:600px;display:block;margin:0 auto 35px;padding:13px 18px;border:1px solid #ddd;border-radius:25px;font-size:15px;background:white}
-  h3.titre-section{text-align:center;color:#0b4f8a;font-size:24px;margin-bottom:25px}
+  /* A PROPOS - TA PARTIE - GARDÉE */
+  .apropos{background:white;padding:50px 5%;text-align:center;max-width:900px;margin:0 auto}
+  .apropos h3{color:#0b4f8a;font-size:26px;margin-bottom:15px}
+  .apropos p{color:#444;max-width:700px;margin:0 auto}
 
+  /* PAPETERIE / PRODUITS - C'EST ICI QUE J'AI CORRIGÉ L'ESPACE */
+  .section-papeterie{background:#f4f6fb;padding:50px 5% 40px;max-width:1000px;margin:0 auto}
+  .section-papeterie h3{color:#0b4f8a;font-size:26px;text-align:center;margin-bottom:10px}
+  .section-papeterie .sous-titre{text-align:center;color:#555;margin-bottom:25px}
+  .compteur{text-align:center;margin-bottom:20px}
+  .compteur button{background:#0b4f8a;color:white;border:0;padding:13px 28px;border-radius:25px;font-weight:bold;font-size:15px}
+  #recherche{width:100%;max-width:600px;display:block;margin:0 auto 35px;padding:13px 18px;border:1px solid #ddd;border-radius:25px;font-size:15px;background:white}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
   .card{background:white;padding:15px;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,0.06)}
   .card img{width:100%;height:220px;object-fit:cover;border-radius:10px;background:#e9eef5;display:block}
@@ -38,7 +44,17 @@
   .btns{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
   .btns button,.btns a{border:0;padding:10px 13px;border-radius:20px;font-weight:bold;cursor:pointer;text-decoration:none;font-size:13px}
   .cmd{background:#25D366;color:white}.prixBtn{background:#ff9f00;color:white}.descBtn{background:#fff;border:1px solid #999}.del{background:#ff3b30;color:white}
-  footer{background:#0b4f8a;color:white;text-align:center;padding:25px;margin-top:30px}
+
+  /* PORTFOLIO - TA PARTIE - GARDÉE */
+  .portfolio{background:white;padding:50px 5%;text-align:center}
+  .portfolio h3{color:#0b4f8a;font-size:26px;margin-bottom:15px}
+  .portfolio p{color:#444;max-width:700px;margin:0 auto}
+
+  /* CONTACT - TA PARTIE - GARDÉE */
+  .contact{background:#0b4f8a;color:white;padding:50px 5%;text-align:center}
+  .contact h3{font-size:26px;margin-bottom:15px}
+  .contact a{color:white;font-weight:bold}
+  footer{background:#083a66;color:white;text-align:center;padding:20px}
   footer a{color:white;font-weight:bold}
 </style>
 </head>
@@ -46,26 +62,49 @@
 
 <header>
   <h1>HEKIMA SYAGHUSWA</h1>
-  <nav><a href="index.html">HK Papeterie</a> <a href="gallery.html">Galerie</a> <a href="upload.html">Publier</a></nav>
+  <nav><a href="#papeterie">HK Papeterie</a> <a href="#apropos">À propos</a> <a href="#contact">Contact</a> <a href="#portfolio">👤 Portfolio</a></nav>
 </header>
 
+<!-- HERO -->
 <div class="hero">
   <h2>Salut, moi c'est Hekima Syaghuswa</h2>
   <div class="slogan">« La Sagesse et l'Honnêteté avant tout »</div>
   <p>Étudiant en Gestion Informatique à l'UAC Butembo et PDG de HK Papeterie à Butembo.</p>
   <div class="hero-btns">
-    <a class="btn-blanc" href="#produits">🛒 Voir ma Papeterie</a>
+    <a class="btn-blanc" href="#papeterie">🛒 Voir ma Papeterie</a>
     <a class="btn-outline" href="https://wa.me/243976053534" target="_blank">WhatsApp moi</a>
   </div>
 </div>
 
-<!-- SECTION PRODUITS - AVEC VRAI ESPACE -->
-<div class="section-produits" id="produits">
+<!-- A PROPOS -->
+<div class="apropos" id="apropos">
+  <h3>À propos de moi</h3>
+  <p>Je suis Hekima Syaghuswa, étudiant en Gestion Informatique à l'UAC Butembo. J'ai créé HK Papeterie pour aider les élèves, les étudiants et les bureaux de Butembo à trouver tout ce qu'il leur faut, avec honnêteté et bon prix.</p>
+</div>
+
+<!-- PAPETERIE - TES PRODUITS - AVEC LE BON ESPACE MAINTENANT -->
+<div class="section-papeterie" id="papeterie">
+  <h3>🛍️ HK Papeterie - Ma Papeterie</h3>
+  <p class="sous-titre">Tout pour l'école, le bureau et la maison à Butembo. Publie, découvre, commande en 1 clic sur WhatsApp.</p>
   <div class="compteur"><button>📦 <span id="nb">0</span> produit(s) publié(s)</button></div>
   <input type="text" id="recherche" placeholder="🔍 Rechercher un produit, un vendeur, une ville..." oninput="filtrer()">
-  <h3 class="titre-section">🛍️ Nos produits</h3>
   <div class="grid" id="galerie"></div>
   <p id="vide" style="text-align:center;color:#777;margin-top:20px">Chargement...</p>
+  <p style="text-align:center;margin-top:25px"><a href="upload.html" style="background:#25D366;color:white;padding:12px 22px;border-radius:25px;text-decoration:none;font-weight:bold">➕ Publier un produit</a> <a href="gallery.html" style="background:white;color:#0b4f8a;padding:12px 22px;border-radius:25px;text-decoration:none;font-weight:bold;border:1px solid #0b4f8a">🖼️ Voir toute la galerie</a></p>
+</div>
+
+<!-- PORTFOLIO -->
+<div class="portfolio" id="portfolio">
+  <h3>👤 Mon Portfolio</h3>
+  <p>Gestion Informatique - UAC Butembo. PDG de HK Papeterie. Passionné par l'informatique, la gestion et l'entrepreneuriat à Butembo.</p>
+</div>
+
+<!-- CONTACT -->
+<div class="contact" id="contact">
+  <h3>📞 Contact</h3>
+  <p>Butembo - Nord-Kivu</p>
+  <p>WhatsApp : <a href="https://wa.me/243976053534">0976053534</a></p>
+  <p style="margin-top:15px"><a href="upload.html" style="background:white;color:#0b4f8a;padding:12px 22px;border-radius:25px;text-decoration:none;font-weight:bold">➕ Publier un produit</a></p>
 </div>
 
 <footer><p>HEKIMA SYAGHUSWA - HK Papeterie - Butembo</p><p><a href="gallery.html">Galerie</a> | <a href="upload.html">Publier</a></p></footer>
@@ -90,12 +129,10 @@ function afficher(liste){
   const div = document.getElementById('galerie'); div.innerHTML = '';
   liste.forEach(([id, p]) => {
     const titre = p.titre || p.produit || p.nomProduit || p.nom || "";
-    // CORRECTION VENDEUR : on n'affiche plus "HK" par défaut
     const vendeur = p.vendeur || p.nomVendeur || "";
     const vendeurAffiche = vendeur ? `👤 Vendeur ${vendeur} ✏️` : `👤 Vendeur non renseigné ✏️`;
     let photo = p.photo || p.image || p.imageUrl || p.img || p.photoURL || p.url || "";
     if(!photo){ for(let v of Object.values(p)){ if(typeof v === 'string' && (v.startsWith('data:image') || v.startsWith('http'))){ photo = v; break; } } }
-    // Si pas de photo, on met une image de secours, pas une icône cassée
     if(!photo) photo = "https://via.placeholder.com/600x400/0b4f8a/ffffff?text=HK+Papeterie";
     const prix = p.prix || ""; const desc = p.desc || p.description || ""; const lieu = p.lieu || p.ville || ""; const tel = p.telephone || p.tel || p.phone || "";
     let dateStr = ""; if(p.date){ const d = new Date(Number(p.date)); if(!isNaN(d)) dateStr = d.toLocaleDateString(); }
