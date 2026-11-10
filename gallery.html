@@ -3,120 +3,128 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Galerie - HK</title>
+<title>Galerie - HK Papeterie</title>
 <style>
-body{background:#f4f6fb;font-family:Arial;margin:0;padding:20px}
+*{box-sizing:border-box;font-family:Arial}
+body{background:#f4f6fb;margin:0;padding:20px}
 h2{text-align:center;color:#0b4f8a}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:15px;max-width:950px;margin:auto}
-.card{background:white;border-radius:15px;overflow:hidden;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.card img{width:100%;height:200px;object-fit:cover;border-radius:12px;background:#eee;display:block}
-.badge{display:inline-block;background:#0b4f8a;color:white;font-size:13px;padding:6px 14px;border-radius:20px;font-weight:bold;margin:10px 0 5px;cursor:pointer;border:0}
-.titre{font-size:19px;font-weight:bold;margin:5px 0;color:#0b4f8a}
-.desc{color:#333;margin:5px 0}
-.info{color:#333;font-size:14px;margin:4px 0}
-.prix{display:inline-block;background:#fff3d6;color:#b77900;font-weight:bold;padding:6px 12px;border-radius:20px;margin-top:8px}
-.btns{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
-.btns button,.btns a{border:0;padding:9px 12px;border-radius:20px;font-weight:bold;cursor:pointer;text-decoration:none;font-size:13px}
-.cmd{background:#25D366;color:white;flex:1;text-align:center}
-.prixBtn{background:#ff9f00;color:white}
-.descBtn{background:#fff;border:1px solid #999}
-.del{background:#ff3b30;color:white}
-a.retour{display:block;text-align:center;margin-top:20px;color:#0b4f8a;font-weight:bold}
+.top{text-align:center;margin-bottom:20px}
+.top a{color:#0b4f8a;font-weight:bold;text-decoration:none;margin:0 10px}
+.compteur{text-align:center;background:#0b4f8a;color:white;padding:10px 20px;border-radius:20px;max-width:300px;margin:0 auto 20px;font-weight:bold}
+.recherche{max-width:500px;margin:0 auto 20px}
+.recherche input{width:100%;padding:13px;border:1px solid #ddd;border-radius:20px;font-size:16px;outline:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;max-width:1000px;margin:auto}
+.card{background:white;border-radius:15px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,0.08)}
+.card img{width:100%;height:auto;max-height:380px;object-fit:contain;background:#fff;display:block}
+.card div{padding:15px}
+.card h3{margin:5px 0;color:#0b4f8a}
+.card p{color:#333;line-height:1.5}
+.prix{background:#FFF3E0;color:#E65100;padding:5px 12px;border-radius:20px;font-weight:bold;display:inline-block}
+.vendeur-badge{background:#0b4f8a;color:white;padding:5px 12px;border-radius:20px;font-size:13px;font-weight:bold;display:inline-block;margin-bottom:8px}
+.btn-commander{display:inline-block;background:#25D366;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;margin-top:10px}
+.btn-supprimer{background:#ff3b30;color:white;border:0;padding:10px 15px;border-radius:20px;font-weight:bold;cursor:pointer;margin-left:5px;margin-top:10px}
+.btn-modifier{background:#FF9800;color:white;border:0;padding:10px 15px;border-radius:20px;font-weight:bold;cursor:pointer;margin-left:5px;margin-top:10px}
+.btn-desc{background:#9C27B0;color:white;border:0;padding:10px 15px;border-radius:20px;font-weight:bold;cursor:pointer;margin-left:5px;margin-top:10px}
 </style>
 </head>
 <body>
-<h2>🖼️ Galerie HK - Tout le monde voit tout</h2>
-<div class="grid" id="galerie"></div>
-<p id="vide" style="text-align:center">Chargement...</p>
-<a class="retour" href="index.html">🏠 Retour HEKIMA</a> | <a class="retour" href="upload.html">➕ Publier</a>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-const CODE_ADMIN = "HK1234";
-function demanderCode(){
-  const code = prompt("🔐 Code admin pour modifier / supprimer ?");
-  if(code !== CODE_ADMIN){ alert("Code faux ! Action bloquée."); return false; }
-  return true;
-}
-const firebaseConfig = {
-  apiKey: "AIzaSyAjAXZJDJyHCN5ed5fJQY1DzRA_Kq3h5Rs",
-  authDomain: "tphk-gallery.firebaseapp.com",
-  databaseURL: "https://tphk-gallery-default-rtdb.firebaseio.com",
-  projectId: "tphk-gallery",
-  storageBucket: "tphk-gallery.firebasestorage.app",
-  messagingSenderId: "212082158055",
-  appId: "1:212082158055:web:fccaadb4785f511071b542"
-};
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+<h2>📸 Galerie Publique HK - Tout le monde</h2>
+<p class="top"><a href="index.html">⬅ Retour</a> | <a href="upload.html">➕ Publier</a></p>
+<div class="compteur" id="compteur">Chargement...</div>
 
-onValue(ref(db, 'produits'), (snap) => {
-  const div = document.getElementById('galerie');
-  div.innerHTML = '';
-  const data = snap.val();
-  if(!data){ document.getElementById('vide').textContent = "Aucune photo pour l'instant"; return; }
-  document.getElementById('vide').style.display = 'none';
-  Object.entries(data).reverse().forEach(([id, p]) => {
-    const titre = p.titre || p.produit || p.nomProduit || p.nom || "";
-    // CORRIGÉ : même logique que index.html
-    const vendeur = p.vendeur || p.nomVendeur || p.auteur || (p.titre && p.nom && p.nom !== p.titre ? p.nom : "HK");
-    let photo = p.photo || p.image || p.imageUrl || p.img || p.photoURL || p.url || "";
-    if(!photo){
-      for(let v of Object.values(p)){
-        if(typeof v === 'string' && (v.startsWith('data:image') || v.startsWith('http'))){ photo = v; break; }
-      }
-    }
-    const prix = p.prix || "";
-    const desc = p.desc || p.description || "";
-    const lieu = p.lieu || p.ville || "";
-    const tel = p.telephone || p.tel || p.phone || "";
-    let dateStr = "";
-    if(p.date){ const d = new Date(Number(p.date)); if(!isNaN(d)) dateStr = d.toLocaleDateString(); }
-    const telClean = String(tel).replace(/\s/g,'');
-    const waLink = telClean ? `https://wa.me/${telClean.startsWith('243') ? telClean : '243' + telClean.replace(/^0/,'')}?text=${encodeURIComponent('Bonjour, je veux commander : ' + titre)}` : '#';
-    div.innerHTML += `<div class="card">
-      <img src="${photo}">
-      <button class="badge" onclick="changerVendeur('${id}','${titre}','${vendeur}')">👤 ${vendeur} ✏️</button>
-      <div class="titre">${titre}</div>
-      <div class="desc">${desc}</div>
-      ${lieu ? `<div class="info">📍 ${lieu}</div>` : ``}
-      ${tel ? `<div class="info">📱 ${tel}</div>` : ``}
-      ${dateStr ? `<div class="info">📅 ${dateStr}</div>` : ``}
-      ${prix ? `<div class="prix">${prix}</div>` : ``}
-      <div class="btns">
-        <a class="cmd" href="${waLink}" target="_blank">Commander</a>
-        <button class="prixBtn" onclick="changerPrix('${id}','${prix}')">✏️ Prix</button>
-        <button class="descBtn" onclick="changerDesc('${id}')">✏️ Desc</button>
-        <button class="del" onclick="supprimer('${id}')">🗑 Supprimer</button>
-      </div>
-    </div>`;
+<div class="recherche">
+  <input id="search" placeholder="🔍 Rechercher un produit, un vendeur, une ville... ex: sac, Hekima, Butembo" oninput="filtrer()">
+</div>
+
+<div class="grid" id="gal"><p style="text-align:center">Chargement...</p></div>
+
+<script>
+const BASE = "https://tphk-gallery-default-rtdb.firebaseio.com";
+const MOT_DE_PASSE = "hk123";
+let tousProduits = [];
+
+function charger(){
+  fetch(BASE+"/produits.json")
+  .then(r=>r.json())
+  .then(data=>{
+    tousProduits = data ? Object.entries(data).reverse() : [];
+    document.getElementById('compteur').innerText = "📦 " + tousProduits.length + " produit(s) publié(s)";
+    afficher(tousProduits);
+  })
+  .catch(e=>{
+    document.getElementById('gal').innerHTML='<p>Pas de connexion. Réessaie.</p>';
   });
-});
-window.changerVendeur = async function(id, titreActuel, vendeurActuel){
-  if(!demanderCode()) return;
-  const nouveau = prompt("Vrai vendeur pour " + titreActuel + " ?", vendeurActuel === "HK" ? "" : vendeurActuel);
-  if(!nouveau) return;
-  const lieu = prompt("Lieu ?"); const tel = prompt("Téléphone ?");
-  await update(ref(db, 'produits/'+id), { titre: titreActuel, vendeur: nouveau.trim(), lieu: lieu || "", telephone: tel || "" });
 }
-window.changerPrix = async function(id, ancien){
-  if(!demanderCode()) return;
-  const nouveau = prompt("Nouveau prix ?", ancien);
-  if(nouveau === null) return;
-  await update(ref(db, 'produits/'+id), { prix: nouveau });
+
+function afficher(entrees){
+  if(entrees.length==0){
+    document.getElementById('gal').innerHTML='<p>Aucun produit trouvé.</p>';
+    return;
+  }
+  document.getElementById('gal').innerHTML = entrees.map(([id, x])=>`
+    <div class="card">
+      <img src="${x.img}" alt="${x.nom}">
+      <div>
+        <span class="vendeur-badge">👤 ${x.vendeur || 'Vendeur HK'}</span>
+        <h3>${x.nom}</h3>
+        <p>${x.desc || ''}</p>
+        <p>📍 ${x.adresse}<br>📱 ${x.tel}<br>📅 ${x.date || ''}</p>
+        <span class="prix">${x.prix}</span><br>
+        <a class="btn-commander" href="https://wa.me/243${String(x.tel || '').replace(/[^0-9]/g,'').slice(-9)}">Commander</a>
+        <button class="btn-modifier" onclick="modifierPrix('${id}','${x.prix}')">✏️ Prix</button>
+        <button class="btn-desc" onclick="modifierDesc('${id}')">✏️ Desc</button>
+        <button class="btn-supprimer" onclick="supprimerProduit('${id}')">🗑 Supprimer</button>
+      </div>
+    </div>
+  `).join('');
 }
-window.changerDesc = async function(id){
-  if(!demanderCode()) return;
-  const nouveau = prompt("Nouvelle description ?");
-  if(nouveau === null) return;
-  await update(ref(db, 'produits/'+id), { desc: nouveau });
+
+function filtrer(){
+  let mot = document.getElementById('search').value.toLowerCase().trim();
+  if(!mot){ afficher(tousProduits); return; }
+  let filtres = tousProduits.filter(([id,x])=>{
+    return (x.nom||'').toLowerCase().includes(mot) ||
+           (x.vendeur||'').toLowerCase().includes(mot) ||
+           (x.desc||'').toLowerCase().includes(mot) ||
+           (x.adresse||'').toLowerCase().includes(mot);
+  });
+  afficher(filtres);
 }
-window.supprimer = async function(id){
-  if(!demanderCode()) return;
+
+async function supprimerProduit(id){
+  let mdp = prompt("🔒 Mot de passe Admin pour supprimer :");
+  if(mdp === null) return;
+  if(mdp !== MOT_DE_PASSE){ alert("Mot de passe incorrect !"); return; }
   if(!confirm("Supprimer ce produit ?")) return;
-  await remove(ref(db, 'produits/'+id));
+  await fetch(BASE+"/produits/"+id+".json",{method:"DELETE"});
+  alert("Supprimé !");
+  charger();
 }
+
+async function modifierPrix(id, ancienPrix){
+  let mdp = prompt("🔒 Mot de passe Admin pour modifier le prix :");
+  if(mdp === null) return;
+  if(mdp !== MOT_DE_PASSE){ alert("Mot de passe incorrect !"); return; }
+  let nouveauPrix = prompt("Nouveau prix (ex: 20000 FC ou 12 $) :", ancienPrix);
+  if(nouveauPrix === null || nouveauPrix.trim() === "") return;
+  await fetch(BASE+"/produits/"+id+".json",{method:"PATCH", body: JSON.stringify({prix: nouveauPrix.trim()})});
+  alert("Prix modifié !");
+  charger();
+}
+
+async function modifierDesc(id){
+  let mdp = prompt("🔒 Mot de passe Admin pour modifier la description :");
+  if(mdp === null) return;
+  if(mdp !== MOT_DE_PASSE){ alert("Mot de passe incorrect !"); return; }
+  let nouvelleDesc = prompt("Nouvelle description :");
+  if(nouvelleDesc === null) return;
+  await fetch(BASE+"/produits/"+id+".json",{method:"PATCH", body: JSON.stringify({desc: nouvelleDesc.trim()})});
+  alert("Description modifiée !");
+  charger();
+}
+
+charger();
 </script>
 </body>
 </html>

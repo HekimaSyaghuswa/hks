@@ -1,72 +1,59 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Publier - HK</title>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Publier - HK</title>
 <style>*{box-sizing:border-box;font-family:Arial}body{background:#f4f6fb;margin:0;padding:20px}.box{max-width:500px;margin:auto;background:white;padding:25px;border-radius:15px}h2{color:#0b4f8a;text-align:center}input,textarea{width:100%;padding:13px;margin:8px 0;border:1px solid #ddd;border-radius:10px}button{width:100%;background:#25D366;color:white;border:0;padding:15px;border-radius:10px;font-weight:bold;font-size:17px}button:disabled{opacity:.6}a{display:block;text-align:center;margin-top:15px;color:#0b4f8a;font-weight:bold}img{width:100%;border-radius:10px;margin-top:10px;display:none}</style>
 </head>
 <body>
 <div class="box">
 <h2>➕ Publie ton produit</h2>
-<input id="vendeur" placeholder="Ton nom - Vendeur ex: Gustave">
-<input id="titre" placeholder="Nom du produit ex: MUHINDO">
-<input id="prix" placeholder="Prix ex: 200$">
-<textarea id="desc" placeholder="Description ex: 1000Giga, 8Gb Ram"></textarea>
-<input id="lieu" placeholder="Lieu ex: Goma">
-<input id="telephone" placeholder="Téléphone ex: 0976053534">
-<label style="font-weight:bold">📸 Choisis ta photo :</label>
-<input type="file" id="photo" accept="image/*">
-<img id="apercu">
-<button id="btn" onclick="publier()">Publier</button>
-<p id="msg" style="text-align:center;color:green;font-weight:bold"></p>
-<a href="index.html">🏠 Voir HEKIMA</a> | <a href="gallery.html">🖼️ Voir Galerie</a>
+<p style="text-align:center">Tout le monde dans le monde entier verra ton produit !</p>
+
+<!-- ICI LES CHAMPS -->
+<input id="nom" placeholder="Nom du produit * ex: Sac à dos">
+<input id="vendeur" placeholder="Ton nom / Ta place * ex: HK Papeterie - Butembo">
+<input id="prix" placeholder="Prix * ex: 15000 FC/ 25 $">
+<input id="adresse" placeholder="Ton adresse * ex: Butembo, Kitatumba">
+<input id="tel" placeholder="Ton WhatsApp * ex: 0976053534">
+<textarea id="desc" placeholder="Description"></textarea>
+<label><b>Photo du produit *</b></label>
+<input type="file" id="photo" accept="image/*"><img id="preview">
+<button id="btn" onclick="publier()">📤 Publier pour tout le monde</button>
+<a href="index.html">⬅ Retour</a>
 </div>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-const firebaseConfig = {
-  apiKey: "AIzaSyAjAXZJDJyHCN5ed5fJQY1DzRA_Kq3h5Rs",
-  authDomain: "tphk-gallery.firebaseapp.com",
-  databaseURL: "https://tphk-gallery-default-rtdb.firebaseio.com",
-  projectId: "tphk-gallery",
-  storageBucket: "tphk-gallery.firebasestorage.app",
-  messagingSenderId: "212082158055",
-  appId: "1:212082158055:web:fccaadb4785f511071b542"
-};
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-
-let photoBase64 = "";
-document.getElementById('photo').addEventListener('change', e => {
-  const f = e.target.files[0];
-  if(!f) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    photoBase64 = ev.target.result;
-    const img = document.getElementById('apercu');
-    img.src = photoBase64; img.style.display='block';
-  };
-  reader.readAsDataURL(f);
+<script>
+const BASE = "https://tphk-gallery-default-rtdb.firebaseio.com";
+let imgData="";
+document.getElementById('photo').addEventListener('change',e=>{
+  let file=e.target.files[0]; if(!file) return;
+  let reader=new FileReader();
+  reader.onload=ev=>{
+    let img=new Image(); img.onload=()=>{
+      let c=document.createElement('canvas'); let max=800; let w=img.width,h=img.height;
+      if(w>max){h=h*max/w;w=max;} c.width=w;c.height=h; c.getContext('2d').drawImage(img,0,0,w,h);
+      imgData=c.toDataURL('image/jpeg',0.7);
+      let p=document.getElementById('preview'); p.src=imgData; p.style.display='block';
+    }; img.src=ev.target.result;
+  }; reader.readAsDataURL(file);
 });
 
-window.publier = async function(){
-  const vendeur = document.getElementById('vendeur').value.trim();
-  const titre = document.getElementById('titre').value.trim();
-  const prix = document.getElementById('prix').value.trim();
-  const desc = document.getElementById('desc').value.trim();
-  const lieu = document.getElementById('lieu').value.trim();
-  const telephone = document.getElementById('telephone').value.trim();
-  const btn = document.getElementById('btn');
-  if(!vendeur || !titre || !photoBase64){ alert("Remplis vendeur, produit et photo"); return; }
-  btn.disabled = true; btn.textContent = "Envoi...";
-  await push(ref(db, 'produits'), {
-    vendeur: vendeur, titre: titre, prix: prix, desc: desc, lieu: lieu, telephone: telephone,
-    photo: photoBase64, date: Date.now()
-  });
-  alert("Publié !");
-  window.location.href = "index.html";
+async function publier(){
+  let nom=document.getElementById('nom').value.trim();
+  let vendeur=document.getElementById('vendeur').value.trim();
+  let prix=document.getElementById('prix').value.trim();
+  let adresse=document.getElementById('adresse').value.trim();
+  let tel=document.getElementById('tel').value.trim();
+  let desc=document.getElementById('desc').value.trim();
+  if(!nom||!vendeur||!prix||!adresse||!tel||!imgData){alert("Remplis Nom, Ton nom, Prix, Adresse, Téléphone et Photo !");return;}
+  let btn=document.getElementById('btn');
+  btn.disabled=true; btn.innerText="Envoi en cours...";
+  try{
+    await fetch(BASE+"/produits.json",{method:"POST",body:JSON.stringify({nom,vendeur,prix,adresse,tel,desc,img:imgData,date:new Date().toLocaleDateString()})});
+    alert("Publié ! Tout le monde peut maintenant le voir !");
+    window.location.href='index.html#galerie-publique';
+  }catch(e){
+    alert("Erreur, réessaie. Vérifie ta connexion.");
+    btn.disabled=false; btn.innerText="📤 Publier pour tout le monde";
+  }
 }
 </script>
 </body>

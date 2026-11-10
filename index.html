@@ -52,6 +52,11 @@
   @media(max-width:600px){header nav{display:none} .hero h2{font-size:28px} .bande-galerie h2{font-size:20px} .bande-galerie p{font-size:15px}}
   .btn-modifier{background:#FF9800;color:white;border:0;padding:10px 15px;border-radius:20px;font-weight:bold;cursor:pointer;margin-left:5px;margin-top:10px}
 .compteur{text-align:center;background:#0b4f8a;color:white;padding:10px 20px;border-radius:20px;max-width:300px;margin:0 auto 20px;font-weight:bold}
+.btn-modifier{background:#FF9800;color:white;border:0;padding:10px 15px;border-radius:20px;font-weight:bold;cursor:pointer;margin-left:5px;margin-top:10px}
+.compteur{text-align:center;background:#0b4f8a;color:white;padding:10px 20px;border-radius:20px;max-width:300px;margin:0 auto 20px;font-weight:bold}
+.btn-desc{background:#9C27B0;color:white;border:0;padding:10px 15px;border-radius:20px;font-weight:bold;cursor:pointer;margin-left:5px;margin-top:10px}
+.recherche{max-width:500px;margin:0 auto 20px}
+.recherche input{width:100%;padding:13px;border:1px solid #ddd;border-radius:20px;font-size:16px;outline:none}
 
 </style>
 </head>
@@ -70,6 +75,11 @@
 </div>
 
 <!-- 2. BANDE BLEUE GALERIE - JUSTE EN DESSOUS DE LA PHOTO, JUSTE AU-DESSUS DE LA PAPETERIE -->
+<div class="compteur" id="compteur-index">Chargement...</div>
+<div class="recherche">
+  <input id="search-index" placeholder="🔍 Rechercher un produit, un vendeur, une ville..." oninput="filtrerIndex()">
+</div>
+<div id="liste-produits"></div>
 <div class="bande-galerie">
   <h2>Vous pouvez voir nos  produits ici<br>ou publier aussi vos produits dans ma galerie</h2>
   <p>publie ton produit ici en y mettant votre adresse et le prix et tout le monde verra votre produit</p>
