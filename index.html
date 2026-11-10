@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hekima Syaghuswa - HK Papeterie Butembo</title>
-
 <style>
   *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
   body{background:#f4f6fb;color:#222;line-height:1.6}
@@ -52,17 +51,14 @@
   @media(max-width:600px){header nav{display:none} .hero h2{font-size:28px} .bande-galerie h2{font-size:20px} .bande-galerie p{font-size:15px}}
   .btn-modifier{background:#FF9800;color:white;border:0;padding:10px 15px;border-radius:20px;font-weight:bold;cursor:pointer;margin-left:5px;margin-top:10px}
 .compteur{text-align:center;background:#0b4f8a;color:white;padding:10px 20px;border-radius:20px;max-width:300px;margin:0 auto 20px;font-weight:bold}
-.btn-modifier{background:#FF9800;color:white;border:0;padding:10px 15px;border-radius:20px;font-weight:bold;cursor:pointer;margin-left:5px;margin-top:10px}
-.compteur{text-align:center;background:#0b4f8a;color:white;padding:10px 20px;border-radius:20px;max-width:300px;margin:0 auto 20px;font-weight:bold}
 .btn-desc{background:#9C27B0;color:white;border:0;padding:10px 15px;border-radius:20px;font-weight:bold;cursor:pointer;margin-left:5px;margin-top:10px}
 .recherche{max-width:500px;margin:0 auto 20px}
 .recherche input{width:100%;padding:13px;border:1px solid #ddd;border-radius:20px;font-size:16px;outline:none}
-
 </style>
 </head>
 <body>
 
-<header><h1>HEKIMA SYAGHUSWA</h1><nav><a href="#papeterie">HK Papeterie</a><a href="#apropos">À propos</a><a href="#contact">Contact</a><a href="portfolio.html">👤 Portfolio</a></nav></header>
+<header><h1>HEKIMA SYAGHUSWA</h1><nav><a href="#papeterie">HK Papeterie</a><a href="#apropos">À propos</a><a href="#contact">Contact</a></nav></header>
 
 <!-- 1. PHOTO FILIGRANE EN HAUT -->
 <div class="hero">
@@ -75,11 +71,6 @@
 </div>
 
 <!-- 2. BANDE BLEUE GALERIE - JUSTE EN DESSOUS DE LA PHOTO, JUSTE AU-DESSUS DE LA PAPETERIE -->
-<div class="compteur" id="compteur-index">Chargement...</div>
-<div class="recherche">
-  <input id="search-index" placeholder="🔍 Rechercher un produit, un vendeur, une ville..." oninput="filtrerIndex()">
-</div>
-<div id="liste-produits"></div>
 <div class="bande-galerie">
   <h2>Vous pouvez voir nos  produits ici<br>ou publier aussi vos produits dans ma galerie</h2>
   <p>publie ton produit ici en y mettant votre adresse et le prix et tout le monde verra votre produit</p>
@@ -101,14 +92,13 @@
   <a class="btn-green" href="https://wa.me/243976053534?text=Bonjour%20HK%20Papeterie%2C%20je%20veux%20commander">📱 Commander sur WhatsApp</a>
 </div></section>
 <!-- GALERIE PUBLIQUE VISIBLE DIRECTEMENT -->
- <div class="compteur" id="compteur-index">Chargement...</div>
- <div class="recherche">
-  <input id="search-index" placeholder="🔍 Rechercher un produit, un vendeur, une ville..." oninput="filtrerIndex()">
-</div>
-<div id="liste-produits"></div>
 <section id="galerie-publique" style="padding-top:0">
   <h3>🛍️ Produits de la Communauté - Galerie Publique</h3>
   <p style="text-align:center;margin-bottom:20px">Voici les produits publiés par tout le monde. Pas besoin de cliquer, ils sont déjà là !</p>
+  <div class="compteur" id="compteur-index">Chargement...</div>
+  <div class="recherche">
+  <input id="search-index" placeholder="🔍 Rechercher un produit, un vendeur, une ville..." oninput="filtrerIndex()">
+</div>
   <div id="liste-produits" class="papeterie-grid"></div>
   <div style="text-align:center;margin-top:20px">
     <a href="upload.html" style="display:inline-block;background:#25D366;color:white;padding:14px 25px;border-radius:30px;text-decoration:none;font-weight:bold">➕ Publie aussi ton produit</a>
@@ -195,6 +185,7 @@ async function modifierDesc(id){
 }
 afficherProduits();
 </script>
+
 <section id="apropos"><h3>Qui suis-je ?</h3><div class="about-box"><p>Je m'appelle <b>Hekima Syaghuswa</b>, je vis à <b>Butembo, Nord-Kivu (RDC)</b>. Étudiant à l'<b>UAC Butembo</b> en <b>Gestion Informatique</b> et fondateur de <b>HK Papeterie</b>. Je suis <b>catholique</b> et ma mission est de prôner la <b>sagesse</b> et l'<b>honnêteté</b>.</p></div></section>
 
 <section id="contact"><h3>Contacte-moi / HK Papeterie</h3><div class="contact-box"><p>📍 Butembo, Nord-Kivu - RDC</p><a class="wa" href="https://wa.me/243976053534">📱 WhatsApp : +243 976 053 534</a><br><a class="mail" href="mailto:hkkakule@gmail.com">📧 Gmail : hkkakule@gmail.com</a><br><a class="fb" href="https://www.facebook.com/search/top?q=Hekima%20Syaghuswa">📘 Facebook : Hekima Syaghuswa</a></div></section>
